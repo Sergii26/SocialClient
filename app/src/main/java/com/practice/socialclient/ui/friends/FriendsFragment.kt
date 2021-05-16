@@ -19,7 +19,6 @@ import com.practice.socialclient.ui.arch.MvvmFragment
 import com.practice.socialclient.ui.listener.EndlessScrollListener
 import javax.inject.Inject
 
-
 class FriendsFragment : MvvmFragment<Contract.Host>() {
 
     private val logger: ILog = Logger.withTag("MyLog")
@@ -52,11 +51,13 @@ class FriendsFragment : MvvmFragment<Contract.Host>() {
             .friendsFragmentModule(FriendsFragmentModule())
             .build()
             .injectFriendsFragment(this)
-        viewModel = viewModelFactory.let { ViewModelProvider(this, it).get(FriendsViewModel::class.java) }
+        viewModel =
+            viewModelFactory.let { ViewModelProvider(this, it).get(FriendsViewModel::class.java) }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_friends, container, false)
         return binding.root
     }
@@ -73,48 +74,57 @@ class FriendsFragment : MvvmFragment<Contract.Host>() {
             twAdapter.clearFriendsList()
             twScrollListener.resetState()
             fbScrollListener.resetState()
-            if (hasCallBack()) callBack!!.downloadUserData()
+            if (hasCallBack()) {
+                callBack!!.downloadUserData()
+            }
         }
         rvFbFriends.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         rvFbFriends.adapter = fbAdapter
 
-        viewModel.getFbFriendsList().observe(viewLifecycleOwner, { friendsList: MutableList<FriendInfo> ->
-            logger.log("FriendsFragment getFbFriendsList()")
-            if(fbAdapter.getFriendsList().size == 0){
-                fbAdapter.setFriendsList(friendsList)
-            } else {
-                fbAdapter.addNextPage(friendsList)
-            }
-            viewModel.clearFbFriendsList()
-        })
+        viewModel.getFbFriendsList()
+            .observe(viewLifecycleOwner, { friendsList: MutableList<FriendInfo> ->
+                logger.log("FriendsFragment getFbFriendsList()")
+                if (fbAdapter.getFriendsList().size == 0) {
+                    fbAdapter.setFriendsList(friendsList)
+                } else {
+                    fbAdapter.addNextPage(friendsList)
+                }
+                viewModel.clearFbFriendsList()
+            })
 
         rvTwFriends.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         rvTwFriends.adapter = twAdapter
 
-        viewModel.getTwFriendsList().observe(viewLifecycleOwner, { friendsList: MutableList<FriendInfo> ->
-            logger.log("FriendsFragment getTwFriendsList()")
-            logger.log("FriendsFragment getTwFriendsList works")
-            if(twAdapter.getFriendsList().size == 0){
-                twAdapter.setFriendsList(friendsList)
-            } else {
-                twAdapter.addNextPage(friendsList)
-            }
-            viewModel.clearTwFriendsList()
-        })
+        viewModel.getTwFriendsList()
+            .observe(viewLifecycleOwner, { friendsList: MutableList<FriendInfo> ->
+                logger.log("FriendsFragment getTwFriendsList()")
+                logger.log("FriendsFragment getTwFriendsList works")
+                if (twAdapter.getFriendsList().size == 0) {
+                    twAdapter.setFriendsList(friendsList)
+                } else {
+                    twAdapter.addNextPage(friendsList)
+                }
+                viewModel.clearTwFriendsList()
+            })
         rvTwFriends.addOnScrollListener(twScrollListener)
         rvFbFriends.addOnScrollListener(fbScrollListener)
-        viewModel.getFriendsCount().observe(viewLifecycleOwner, { friendsCountInfo: FriendsCountInfo ->
-            logger.log("FriendsFragment getFriendsCount()")
-            binding.friendsCount = friendsCountInfo
-        })
+        viewModel.getFriendsCount()
+            .observe(viewLifecycleOwner, { friendsCountInfo: FriendsCountInfo ->
+                logger.log("FriendsFragment getFriendsCount()")
+                binding.friendsCount = friendsCountInfo
+            })
 
         viewModel.getInternetState().observe(viewLifecycleOwner, {
             logger.log("FriendsFragment getInternetState()")
-            if (!it) showToast(R.string.no_internet)
+            if (!it) {
+                showToast(R.string.no_internet)
+            }
         })
 
         viewModel.getTernOffRefreshing().observe(viewLifecycleOwner, {
-            if (it) swipeRefreshLayout.isRefreshing = false
+            if (it) {
+                swipeRefreshLayout.isRefreshing = false
+            }
         })
 
         viewModel.getFriends()

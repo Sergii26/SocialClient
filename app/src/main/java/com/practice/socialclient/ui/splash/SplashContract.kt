@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import com.practice.socialclient.ui.arch.Contract
 
 interface SplashContract {
-    interface BaseSplashViewModel: LifecycleObserver {
+    interface BaseSplashViewModel : LifecycleObserver {
         fun startTimer()
         fun getIsLoggedIn(): LiveData<Boolean>
     }

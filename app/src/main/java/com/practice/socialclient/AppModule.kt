@@ -19,11 +19,9 @@ import twitter4j.conf.Configuration
 import twitter4j.conf.ConfigurationBuilder
 import javax.inject.Singleton
 
-
 @Module
 class AppModule {
 
-    private val appComponent: AppComponent? = com.practice.socialclient.App.instance?.appComponent
     private val logger = Logger.withTag("MyLog")
 
     @Provides
@@ -48,11 +46,11 @@ class AppModule {
     @Singleton
     fun provideTwitterClient(): Twitter {
         val conf: Configuration = ConfigurationBuilder()
-                .setDebugEnabled(true)
-                .setOAuthConsumerKey(TwitterConstants.CONSUMER_KEY)
-                .setOAuthConsumerSecret(TwitterConstants.CONSUMER_SECRET)
-                .setIncludeEmailEnabled(true)
-                .build()
+            .setDebugEnabled(true)
+            .setOAuthConsumerKey(TwitterConstants.CONSUMER_KEY)
+            .setOAuthConsumerSecret(TwitterConstants.CONSUMER_SECRET)
+            .setIncludeEmailEnabled(true)
+            .build()
         val factory = TwitterFactory(conf)
         return factory.instance
     }

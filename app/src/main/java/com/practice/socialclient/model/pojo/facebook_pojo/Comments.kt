@@ -4,5 +4,5 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
 data class Comments(
-@SerializedName("summary") @Expose var summary: Summary
+    @SerializedName("summary") @Expose var summary: Summary
 )

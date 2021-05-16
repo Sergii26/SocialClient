@@ -8,10 +8,19 @@ import dagger.Provides
 @Module
 class PhotosFragmentModule {
     private val appComponent: AppComponent? = com.practice.socialclient.App.instance?.appComponent
+
     @Provides
     fun providePhotosViewModelFactory(): ViewModelProvider.Factory {
-        return PhotosViewModelFactory(PhotosViewModel(appComponent!!.provideILog(), appComponent.provideNetworkClient(),
-        appComponent.provideTwitterNetworkClient(), appComponent.provideTwitterClient(), appComponent.providePreferences(), appComponent.provideUtils()))
+        return PhotosViewModelFactory(
+            PhotosViewModel(
+                appComponent!!.provideILog(),
+                appComponent.provideNetworkClient(),
+                appComponent.provideTwitterNetworkClient(),
+                appComponent.provideTwitterClient(),
+                appComponent.providePreferences(),
+                appComponent.provideUtils()
+            )
+        )
     }
 
     init {

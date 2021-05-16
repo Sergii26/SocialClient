@@ -10,7 +10,6 @@ import io.reactivex.Single
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-
 class FacebookApiClient : FacebookNetworkClient {
     private val retrofit: Retrofit
     private val facebookApiService: FacebookApiService
@@ -36,7 +35,9 @@ class FacebookApiClient : FacebookNetworkClient {
         return facebookApiService.getUserFriends(token, limit)
     }
 
-    override fun getNextFriendsPage(token: String?, cursorAfter: String?, limit: String?): Single<UserFriendsResponse> {
+    override fun getNextFriendsPage(
+        token: String?, cursorAfter: String?, limit: String?
+    ): Single<UserFriendsResponse> {
         return facebookApiService.getNextFriendsPage(token, cursorAfter, limit)
     }
 
@@ -48,20 +49,23 @@ class FacebookApiClient : FacebookNetworkClient {
         return facebookApiService.getUserPhotos(token, limit)
     }
 
-    override fun getNextUserPhotosPage(token: String?, cursorAfter: String?, limit: String?): Single<UserPhotosResponse> {
+    override fun getNextUserPhotosPage(
+        token: String?, cursorAfter: String?, limit: String?
+    ): Single<UserPhotosResponse> {
         return facebookApiService.getNextUserPhotosPage(token, cursorAfter, limit)
     }
 
     override fun getUserNews(token: String?): Single<NewsResponse> {
-        return  facebookApiService.getUserNews(token)
+        return facebookApiService.getUserNews(token)
     }
 
     override fun getNews(token: String?, limit: Int): Single<NewsResponse> {
         return facebookApiService.getNewestNews(token, limit)
     }
 
-    override fun getNewsWithUntilTime(token: String?, limit: Int, until: String): Single<NewsResponse> {
+    override fun getNewsWithUntilTime(
+        token: String?, limit: Int, until: String
+    ): Single<NewsResponse> {
         return facebookApiService.getNewsWithUntilTime(token, limit, until)
     }
-
 }

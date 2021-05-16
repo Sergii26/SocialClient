@@ -14,16 +14,11 @@ import com.facebook.login.LoginResult
 import com.practice.socialclient.model.logger.ILog
 import com.practice.socialclient.model.network_api.twitter.TwitterNetworkClient
 import com.practice.socialclient.model.prefs.Prefs
-import com.practice.socialclient.model.twitter.TwitterConstants
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import twitter4j.*
-import twitter4j.auth.AccessToken
-import twitter4j.auth.OAuthAuthorization
-import twitter4j.conf.Configuration
-import twitter4j.conf.ConfigurationBuilder
+import twitter4j.Twitter
 
 
 class LoginViewModel(
@@ -31,8 +26,7 @@ class LoginViewModel(
     private val prefs: Prefs,
     private val twitterClient: Twitter,
     private val twitterNetworkClient: TwitterNetworkClient
-) : ViewModel(),
-    LoginContract.BaseViewModel {
+) : ViewModel(), LoginContract.BaseViewModel {
 
     companion object {
         const val FB_LOGIN_CHECKED = "facebook_login_checked"
@@ -103,7 +97,6 @@ class LoginViewModel(
                 twitterAccessToken = result
                 prefs.putIsTwLoggedIn(true)
             })
-
     }
 
     override fun launchFB() {

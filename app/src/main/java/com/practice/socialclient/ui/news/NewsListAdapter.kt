@@ -8,8 +8,6 @@ import com.practice.socialclient.R
 import com.practice.socialclient.databinding.NewsItemBinding
 import com.practice.socialclient.model.logger.Logger
 import com.practice.socialclient.model.pojo.NewsInfo
-import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
 
 class NewsListAdapter : RecyclerView.Adapter<NewsListAdapter.NewsViewHolder>() {
     private val logger = Logger.withTag("MyLog")
@@ -19,7 +17,7 @@ class NewsListAdapter : RecyclerView.Adapter<NewsListAdapter.NewsViewHolder>() {
         return newsList
     }
 
-    fun clearNewsList(){
+    fun clearNewsList() {
         newsList.clear()
         this.notifyDataSetChanged()
     }

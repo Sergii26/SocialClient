@@ -6,10 +6,11 @@ import com.facebook.CallbackManager
 import com.practice.socialclient.ui.arch.Contract
 
 interface LoginContract {
-    interface Host: Contract.Host {
+    interface Host : Contract.Host {
         fun openNewsFragment()
     }
-    interface BaseViewModel{
+
+    interface BaseViewModel {
 
         fun checkLoginStates()
         fun getLoginCheckingState(): MutableLiveData<String>

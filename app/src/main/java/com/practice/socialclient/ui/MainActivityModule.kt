@@ -13,18 +13,22 @@ class MainActivityModule {
 
     @Provides
     fun provideContentViewModelFactory(): ViewModelProvider.Factory {
-        return MainActivityViewModelFactory(MainActivityViewModel(Logger.withTag("MyLog"), appComponent!!.provideNetworkClient(),
-            appComponent.provideTwitterNetworkClient(), appComponent.providePreferences(),
-            appComponent.provideTwitterClient(), appComponent.provideUtils()))
+        return MainActivityViewModelFactory(
+            MainActivityViewModel(
+                Logger.withTag("MyLog"), appComponent!!.provideNetworkClient(),
+                appComponent.provideTwitterNetworkClient(), appComponent.providePreferences(),
+                appComponent.provideTwitterClient(), appComponent.provideUtils()
+            )
+        )
 
     }
 
     init {
         appComponent?.injectMainActivity(this)
-        if(appComponent == null) {
+        if (appComponent == null) {
             Logger.withTag("MyLog").log("appComponent == null")
         } else {
             Logger.withTag("MyLog").log("appComponent != null")
-            }
         }
+    }
 }

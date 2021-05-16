@@ -14,16 +14,16 @@ class FriendsListAdapter : RecyclerView.Adapter<FriendsListAdapter.FriendViewHol
     private val friendsList: MutableList<FriendInfo> = ArrayList()
     private val logger = Logger.withTag("MyLog")
 
-    fun getFriendsList():MutableList<FriendInfo> {
+    fun getFriendsList(): MutableList<FriendInfo> {
         return friendsList
     }
 
-    fun clearFriendsList(){
+    fun clearFriendsList() {
         friendsList.clear()
         notifyDataSetChanged()
     }
 
-    fun setFriendsList(friendsList: MutableList<FriendInfo>){
+    fun setFriendsList(friendsList: MutableList<FriendInfo>) {
         this.friendsList.clear()
         this.friendsList.addAll(friendsList)
         this.notifyDataSetChanged()

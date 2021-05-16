@@ -41,7 +41,7 @@ class NewsViewModel(
         return internetState
     }
 
-    override fun getTernOffRefreshing() : MutableLiveData<Boolean>{
+    override fun getTernOffRefreshing(): MutableLiveData<Boolean> {
         return turnOffRefreshing
     }
 
@@ -49,7 +49,7 @@ class NewsViewModel(
         internetState.value = androidUtils.isConnectedToNetwork
     }
 
-    override fun clearNewsList(){
+    override fun clearNewsList() {
         newsList.value?.clear()
     }
 
@@ -58,7 +58,7 @@ class NewsViewModel(
         this.nextFbNews = NewsInfo()
         this.nextTwNews = NewsInfo()
         turnOffRefreshing.value = true
-        if(androidUtils.isConnectedToNetwork){
+        if (androidUtils.isConnectedToNetwork) {
             internetState.value = true
             downloadNews()
         } else {
@@ -68,7 +68,7 @@ class NewsViewModel(
 
     override fun downloadNews() {
         logger.log("NewsViewModel downloadNews")
-        if(!androidUtils.isConnectedToNetwork){
+        if (!androidUtils.isConnectedToNetwork) {
             internetState.value = false
             return
         }
@@ -151,7 +151,7 @@ class NewsViewModel(
 
     override fun getNextPage() {
         logger.log("NewsViewModel getNextPage")
-        if(!androidUtils.isConnectedToNetwork){
+        if (!androidUtils.isConnectedToNetwork) {
             internetState.value = true
             return
         }
@@ -230,8 +230,7 @@ class NewsViewModel(
             )
                 .zipWith(
                     facebookNetworkClient.getNewsWithUntilTime(
-                        getFbToken(),
-                        newsLimit,
+                        getFbToken(), newsLimit,
                         nextFbNews.createdAtUnix.toString()
                     ),
                     { twNewResponses: Array<TweetsResponse>, fbNews ->
@@ -349,7 +348,6 @@ class NewsViewModel(
         val date = sdf.parse(UTCTime)
         return date.time / 1000
     }
-
 
 
     private fun convertFbUTCTimeToUnix(UTCTime: String): Long {

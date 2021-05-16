@@ -4,8 +4,9 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-public class AndroidUtils implements Utils{
+public class AndroidUtils implements Utils {
     private final Context context;
+
     public AndroidUtils(Context context) {
         this.context = context;
     }

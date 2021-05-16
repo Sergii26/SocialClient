@@ -36,7 +36,7 @@ class LoginFragment : MvvmFragment<LoginContract.Host>() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
     private lateinit var viewModel: LoginContract.BaseViewModel
-    
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         DaggerLoginFragmentComponent.builder()
@@ -48,8 +48,7 @@ class LoginFragment : MvvmFragment<LoginContract.Host>() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_login, container, false)
     }
@@ -72,16 +71,16 @@ class LoginFragment : MvvmFragment<LoginContract.Host>() {
         })
         viewModel.launchFB()
 
-        viewModel.getLoginCheckingState().observe(viewLifecycleOwner, {result ->
+        viewModel.getLoginCheckingState().observe(viewLifecycleOwner, { result ->
             logger.log("PhotosViewModel getLoginCheckingState()")
-            if(result == LoginViewModel.LOGIN_CHECKED){
-                if(hasCallBack()){
+            if (result == LoginViewModel.LOGIN_CHECKED) {
+                if (hasCallBack()) {
                     callBack?.openNewsFragment()
                 }
             }
         })
 
-        btnReady.setOnClickListener { _->
+        btnReady.setOnClickListener {
             logger.log("PhotosViewModel setOnClickListener()")
             viewModel.checkLoginStates()
         }
@@ -104,7 +103,9 @@ class LoginFragment : MvvmFragment<LoginContract.Host>() {
     @Suppress("OverridingDeprecatedMember")
     inner class TwitterWebViewClient : WebViewClient() {
         @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-        override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest? ): Boolean {
+        override fun shouldOverrideUrlLoading(
+            view: WebView?, request: WebResourceRequest?
+        ): Boolean {
             logger.log("PhotosViewModel shouldOverrideUrlLoading()")
             if (request?.url.toString().startsWith(TwitterConstants.CALLBACK_URL)) {
                 logger.log("Authorization URL: " + request?.url.toString())
@@ -138,9 +139,4 @@ class LoginFragment : MvvmFragment<LoginContract.Host>() {
         viewModel.getCallBackManager().onActivityResult(requestCode, resultCode, data)
         super.onActivityResult(requestCode, resultCode, data)
     }
-
 }
-
-
-
-

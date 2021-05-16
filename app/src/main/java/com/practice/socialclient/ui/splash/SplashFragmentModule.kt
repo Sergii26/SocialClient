@@ -12,8 +12,14 @@ class SplashFragmentModule {
 
     @Provides
     fun provideSplashViewModelFactory(): ViewModelProvider.Factory {
-        return SplashViewModelFactory(SplashViewModel(Logger.withTag("MyLog"),
-            appComponent!!.provideTwitterClient(), appComponent.providePreferences(), appComponent.provideTwitterNetworkClient()))
+        return SplashViewModelFactory(
+            SplashViewModel(
+                Logger.withTag("MyLog"),
+                appComponent!!.provideTwitterClient(),
+                appComponent.providePreferences(),
+                appComponent.provideTwitterNetworkClient()
+            )
+        )
     }
 
     init {

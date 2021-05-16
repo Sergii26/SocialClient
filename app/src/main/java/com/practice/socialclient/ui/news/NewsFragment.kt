@@ -16,9 +16,9 @@ import com.practice.socialclient.ui.arch.MvvmFragment
 import com.practice.socialclient.ui.listener.EndlessScrollListener
 import javax.inject.Inject
 
-
 class NewsFragment : MvvmFragment<Contract.Host>() {
     private val logger: ILog = Logger.withTag("MyLog")
+
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
     private lateinit var viewModel: NewsViewModel
@@ -44,7 +44,9 @@ class NewsFragment : MvvmFragment<Contract.Host>() {
             viewModelFactory.let { ViewModelProvider(this, it).get(NewsViewModel::class.java) }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle? ): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_news, container, false)
     }
 
@@ -56,11 +58,15 @@ class NewsFragment : MvvmFragment<Contract.Host>() {
             viewModel.onRefresh()
             adapter.clearNewsList()
             endlessScrollListener.resetState()
-            if (hasCallBack()) callBack!!.downloadUserData()
+            if (hasCallBack()) {
+                callBack!!.downloadUserData()
+            }
         }
         viewModel.getTernOffRefreshing().observe(viewLifecycleOwner, {
             logger.log("NewsFragment getTernOffRefreshing")
-            if (it) swipeRefreshLayout.isRefreshing = false
+            if (it) {
+                swipeRefreshLayout.isRefreshing = false
+            }
         })
         rvNews = view.findViewById(R.id.rvNews)
         rvNews.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
@@ -77,7 +83,9 @@ class NewsFragment : MvvmFragment<Contract.Host>() {
         })
         viewModel.getInternetState().observe(viewLifecycleOwner, {
             logger.log("NewsFragment getInternetState")
-            if (!it) showToast(R.string.no_internet)
+            if (!it) {
+                showToast(R.string.no_internet)
+            }
         })
 
         if (savedInstanceState == null && hasCallBack()) {
@@ -85,5 +93,4 @@ class NewsFragment : MvvmFragment<Contract.Host>() {
         }
         viewModel.downloadNews()
     }
-
 }

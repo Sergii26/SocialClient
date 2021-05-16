@@ -13,8 +13,16 @@ class FriendsFragmentModule {
     fun provideFriendsViewModelFactory(): ViewModelProvider.Factory {
 //        val token = appComponent?.providePreferences()?.getTwitterAuthToken().toString()
 //        val secret = appComponent?.providePreferences()?.getTwitterAuthSecret().toString()
-        return FriendsViewModelFactory(FriendsViewModel(appComponent!!.provideILog(), appComponent.provideNetworkClient(),
-            appComponent.provideTwitterNetworkClient(), appComponent.provideTwitterClient(), appComponent.providePreferences(), appComponent.provideUtils()))
+        return FriendsViewModelFactory(
+            FriendsViewModel(
+                appComponent!!.provideILog(),
+                appComponent.provideNetworkClient(),
+                appComponent.provideTwitterNetworkClient(),
+                appComponent.provideTwitterClient(),
+                appComponent.providePreferences(),
+                appComponent.provideUtils()
+            )
+        )
     }
 
     init {

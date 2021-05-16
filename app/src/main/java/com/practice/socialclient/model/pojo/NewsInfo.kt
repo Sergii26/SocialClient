@@ -11,10 +11,9 @@ data class NewsInfo(
     var createdAtUnix: Long,
     var source: String,
     var createdAt: String
-
 ) {
 
-    constructor() : this("","","","","","","", 0, "", "")
+    constructor() : this("", "", "", "", "", "", "", 0, "", "")
 
     companion object {
         const val SOURCE_FACEBOOK = "facebook"

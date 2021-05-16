@@ -1,12 +1,10 @@
 package com.practice.socialclient.ui.arch
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.practice.socialclient.model.logger.ILog
 import com.practice.socialclient.model.logger.Logger
-import com.practice.socialclient.ui.arch.Contract
 import java.lang.reflect.ParameterizedType
 
 open class MvvmFragment<Host : Contract.Host?> : Fragment() {
@@ -31,11 +29,11 @@ open class MvvmFragment<Host : Contract.Host?> : Fragment() {
         return callBack == null
     }
 
-    fun showToast(message: String){
+    fun showToast(message: String) {
         Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
     }
 
-    fun showToast(resId: Int){
+    fun showToast(resId: Int) {
         Toast.makeText(activity, resId, Toast.LENGTH_LONG).show()
     }
 
@@ -47,7 +45,7 @@ open class MvvmFragment<Host : Contract.Host?> : Fragment() {
             callBack = context as Host
         } catch (e: Throwable) {
             val hostClassName = ((javaClass.genericSuperclass as ParameterizedType?)
-                ?.getActualTypeArguments()?.get(1) as Class<*>).canonicalName
+                ?.actualTypeArguments?.get(1) as Class<*>).canonicalName
             throw RuntimeException(
                 "Activity must implement " + hostClassName
                         + " to attach " + this.javaClass.simpleName, e

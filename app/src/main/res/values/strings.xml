@@ -7,7 +7,7 @@
     <string name="tw_secret_key">CDAPmwCLJXuVxEojn0U9nfeRPCJJWawzLjgtbOMN92yl6RWnxl</string>
     <string name="tw_bearer_token">AAAAAAAAAAAAAAAAAAAAAGGqLwEAAAAAtc9Z0quCoPcHucgD1HOUattniN4%3DTsHDcKP0na9DMXiYezvgqqmdar3gkaGJmp4OIXDVcweRXdE2Yd</string>
     <string name="login_twitter_btn">Login Twitter</string>
-    <string name="signature"></string>
+    <string name="signature" />
     <string name="news_picture_description">News Picture</string>
     <string name="tw_friends_count_label">Twitter friends: </string>
     <string name="fb_friends_count_label">Facebook friends: </string>

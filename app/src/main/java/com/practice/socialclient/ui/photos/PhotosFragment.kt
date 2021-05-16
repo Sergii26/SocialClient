@@ -16,7 +16,7 @@ import com.practice.socialclient.ui.news.Contract
 import javax.inject.Inject
 
 
-class PhotosFragment :  MvvmFragment<Contract.Host>() {
+class PhotosFragment : MvvmFragment<Contract.Host>() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -51,8 +51,7 @@ class PhotosFragment :  MvvmFragment<Contract.Host>() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_photos, container, false)
     }
@@ -79,7 +78,7 @@ class PhotosFragment :  MvvmFragment<Contract.Host>() {
         rvFbPhotos.adapter = fbPhotosAdapter
         viewModel.getFbUserPhotos().observe(viewLifecycleOwner, { list: MutableList<String> ->
             logger.log("PhotosFragment fb onPhotosListChanged()")
-            if(fbPhotosAdapter.getPhotoList().size == 0){
+            if (fbPhotosAdapter.getPhotoList().size == 0) {
                 fbPhotosAdapter.setPhotoList(list)
             } else {
                 fbPhotosAdapter.addNewPhotosToList(list)
@@ -89,7 +88,7 @@ class PhotosFragment :  MvvmFragment<Contract.Host>() {
 
         viewModel.getTwUserPhotos().observe(viewLifecycleOwner, { list: MutableList<String> ->
             logger.log("PhotosFragment tw onPhotosListChanged()")
-            if(twPhotosAdapter.getPhotoList().size == 0){
+            if (twPhotosAdapter.getPhotoList().size == 0) {
                 twPhotosAdapter.setPhotoList(list)
             } else {
                 twPhotosAdapter.addNewPhotosToList(list)
@@ -99,12 +98,15 @@ class PhotosFragment :  MvvmFragment<Contract.Host>() {
         rvTwPhotos.addOnScrollListener(twScrollListener)
         rvFbPhotos.addOnScrollListener(fbScrollListener)
         viewModel.getInternetState().observe(viewLifecycleOwner, {
-            if (!it) showToast(R.string.no_internet)
+            if (!it) {
+                showToast(R.string.no_internet)
+            }
         })
         viewModel.getTernOffRefreshing().observe(viewLifecycleOwner, {
-            if (it) swipeRefreshLayout.isRefreshing = false
+            if (it) {
+                swipeRefreshLayout.isRefreshing = false
+            }
         })
         viewModel.downloadPhotos()
     }
-
 }

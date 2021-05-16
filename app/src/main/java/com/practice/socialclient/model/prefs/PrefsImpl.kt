@@ -6,7 +6,6 @@ class PrefsImpl(ctx: Context?) : BasicPrefsImpl(ctx!!), Prefs {
     override val defaultPrefsFileName: String
         get() = "socialNetwork"
 
-
     companion object {
         private const val KEY_TWITTER_LOGIN_STATE = "twitter_login_state"
         private const val KEY_FACEBOOK_LOGIN_STATE = "facebook_login_state"

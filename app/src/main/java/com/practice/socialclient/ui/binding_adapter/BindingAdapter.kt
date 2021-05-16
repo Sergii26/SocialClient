@@ -11,10 +11,11 @@ object BindingAdapter {
     @BindingAdapter("android:src")
     fun setImageResource(imageView: ImageView, icon: String?) {
         when (icon) {
-            FriendInfo.SOURCE_FACEBOOK -> Glide.with(imageView).load(R.drawable.icon_facebook_128px).into(imageView)
-            FriendInfo.SOURCE_TWITTER -> Glide.with(imageView).load(R.drawable.icon_twitter_128px).into(imageView)
+            FriendInfo.SOURCE_FACEBOOK -> Glide.with(imageView).load(R.drawable.icon_facebook_128px)
+                .into(imageView)
+            FriendInfo.SOURCE_TWITTER -> Glide.with(imageView).load(R.drawable.icon_twitter_128px)
+                .into(imageView)
             else -> Glide.with(imageView).load(icon).into(imageView)
         }
     }
-
 }
