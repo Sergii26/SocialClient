@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/newsFragment"
+            android:icon="@drawable/icon_news"
+            android:title="@string/menu_item_news_label" />
+        <item
+            android:id="@+id/friendsFragment"
+            android:icon="@drawable/icon_friends"
+            android:title="@string/menu_item_friends_label" />
+        <item
+            android:id="@+id/photosFragment"
+            android:icon="@drawable/icon_photos"
+            android:title="@string/menu_item_photos_label" />
+    </group>
+    <item android:title="@string/menu_item_account_label">
+        <menu>
+            <item
+                android:id="@+id/fbLogin"
+                android:icon="@drawable/icon_facebook_128px"
+                android:title="@string/login_to_facebook_label" />
+            <item
+                android:id="@+id/twLogin"
+                android:icon="@drawable/icon_twitter"
+                android:title="@string/login_to_twitter_label" />
+            <item
+                android:id="@+id/logout"
+                android:icon="@drawable/icon_logout"
+                android:title="@string/logout_label" />
+        </menu>
+    </item>
+</menu>

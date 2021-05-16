@@ -1,3 +1,28 @@
 <resources>
     <string name="app_name">SocialClient</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="facebook_app_id">639796323392014</string>
+    <string name="fb_login_protocol_scheme">fb639796323392014</string>
+    <string name="tw_Api_key">RleE7VHrUbNnLi4KfqBz9INWM</string>
+    <string name="tw_secret_key">CDAPmwCLJXuVxEojn0U9nfeRPCJJWawzLjgtbOMN92yl6RWnxl</string>
+    <string name="tw_bearer_token">AAAAAAAAAAAAAAAAAAAAAGGqLwEAAAAAtc9Z0quCoPcHucgD1HOUattniN4%3DTsHDcKP0na9DMXiYezvgqqmdar3gkaGJmp4OIXDVcweRXdE2Yd</string>
+    <string name="login_twitter_btn">Login Twitter</string>
+    <string name="signature"></string>
+    <string name="news_picture_description">News Picture</string>
+    <string name="tw_friends_count_label">Twitter friends: </string>
+    <string name="fb_friends_count_label">Facebook friends: </string>
+    <string name="ff">ff</string>
+    <string name="facebook_photos_label">Facebook photos</string>
+    <string name="twitter_photos_label">Twitter photos</string>
+    <string name="no_internet">There is not internet connection</string>
+    <string name="login_to_facebook">Is not logged in to facebook</string>
+    <string name="login_to_twitter">Is not logged in to twitter</string>
+    <string name="login_to_facebook_label">Login to facebook</string>
+    <string name="login_to_twitter_label">Login to twitter</string>
+    <string name="logout_label">Logout</string>
+    <string name="menu_item_account_label">Account</string>
+    <string name="menu_item_photos_label">photos</string>
+    <string name="menu_item_friends_label">friends</string>
+    <string name="menu_item_news_label">news</string>
+    <string name="ready_btn_label">Enter</string>
 </resources>

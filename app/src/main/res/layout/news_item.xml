@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="newsInfo"
+            type="com.practice.socialclient.model.pojo.NewsInfo" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/verticalGuideline"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.15" />
+
+
+        <TextView
+            android:id="@+id/tvSourceName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{newsInfo.sourceName}"
+            android:textColor="@color/colorBlack"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/verticalGuideline"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvCreatedAt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{newsInfo.createdAt}"
+            app:layout_constraintStart_toStartOf="@+id/verticalGuideline"
+            app:layout_constraintTop_toBottomOf="@+id/tvSourceName" />
+
+        <TextView
+            android:id="@+id/tvNewsText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:autoLink="web"
+            android:text="@{newsInfo.text}"
+            android:textColor="@color/colorBlack"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/verticalGuideline"
+            app:layout_constraintTop_toBottomOf="@+id/tvCreatedAt" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvNewsPicture"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            app:cardCornerRadius="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/verticalGuideline"
+            app:layout_constraintTop_toBottomOf="@+id/tvNewsText">
+
+            <ImageView
+                android:id="@+id/ivNewsPicture"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:src="@{newsInfo.url}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/verticalGuideline"
+                app:layout_constraintTop_toBottomOf="@+id/tvNewsText"
+                tools:srcCompat="@drawable/ic_launcher_foreground"/>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvSourceIcon"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginTop="4dp"
+            app:cardCornerRadius="16dp"
+            app:layout_constraintEnd_toStartOf="@+id/verticalGuideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/ivSourceIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:src="@{newsInfo.sourceIconUrl}"
+                tools:srcCompat="@tools:sample/avatars" />
+
+        </androidx.cardview.widget.CardView>
+
+        <ImageView
+            android:id="@+id/ivCommentIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ivLikeIcon"
+            app:layout_constraintTop_toBottomOf="@+id/cvNewsPicture"
+            app:srcCompat="@drawable/comment_icon" />
+
+        <ImageView
+            android:id="@+id/ivLikeIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="4dp"
+            app:layout_constraintEnd_toStartOf="@+id/ivCommentIcon"
+            app:layout_constraintStart_toEndOf="@+id/verticalGuideline"
+            app:layout_constraintTop_toBottomOf="@+id/cvNewsPicture"
+            app:srcCompat="@drawable/like_icon" />
+
+        <TextView
+            android:id="@+id/tvCommentCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="@{newsInfo.commentsOrRetweetsCount}"
+            app:layout_constraintBottom_toBottomOf="@+id/ivCommentIcon"
+            app:layout_constraintStart_toEndOf="@+id/ivCommentIcon"
+            app:layout_constraintTop_toTopOf="@+id/ivCommentIcon" />
+
+        <TextView
+            android:id="@+id/tvLikeCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="@{newsInfo.likeCount}"
+            app:layout_constraintBottom_toBottomOf="@+id/ivLikeIcon"
+            app:layout_constraintStart_toEndOf="@+id/ivLikeIcon"
+            app:layout_constraintTop_toTopOf="@+id/ivLikeIcon" />
+
+        <TextView
+            android:id="@+id/tvLine"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="4dp"
+            android:background="@color/colorBlack"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivLikeIcon" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
