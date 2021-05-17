@@ -14,6 +14,8 @@ import com.practice.socialclient.R
 import com.practice.socialclient.model.logger.ILog
 import com.practice.socialclient.model.logger.Logger
 import com.practice.socialclient.ui.arch.MvvmFragment
+import com.practice.socialclient.ui.friends.FriendsViewModel
+import com.practice.socialclient.ui.friends.NewFactory
 
 import javax.inject.Inject
 
@@ -21,17 +23,18 @@ class SplashFragment : MvvmFragment<SplashContract.Host?>() {
     private lateinit var viewModel: SplashContract.BaseSplashViewModel
     private val logger: ILog = Logger.withTag("MyLog")
 
-    @Inject
+//    @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        DaggerSplashFragmentComponent.builder()
-            .splashFragmentModule(SplashFragmentModule())
-            .build()
-            .injectSplashFragment(this)
-
-        viewModel = viewModelFactory.let { ViewModelProvider(this, it).get(SplashViewModel::class.java) }
+//        DaggerSplashFragmentComponent.builder()
+//            .splashFragmentModule(SplashFragmentModule())
+//            .build()
+//            .injectSplashFragment(this)
+//
+//        viewModel = viewModelFactory.let { ViewModelProvider(this, it).get(SplashViewModel::class.java) }
+        viewModel = ViewModelProvider(this, NewSplashFactory()).get(SplashViewModel::class.java)
     }
 
     override fun onCreateView(

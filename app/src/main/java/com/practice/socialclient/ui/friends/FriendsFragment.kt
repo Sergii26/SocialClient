@@ -24,7 +24,7 @@ class FriendsFragment : MvvmFragment<Contract.Host>() {
 
     private val logger: ILog = Logger.withTag("MyLog")
 
-    @Inject
+//    @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private lateinit var viewModel: FriendsViewModel
@@ -47,12 +47,13 @@ class FriendsFragment : MvvmFragment<Contract.Host>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        DaggerFriendsFragmentComponent
-            .builder()
-            .friendsFragmentModule(FriendsFragmentModule())
-            .build()
-            .injectFriendsFragment(this)
-        viewModel = viewModelFactory.let { ViewModelProvider(this, it).get(FriendsViewModel::class.java) }
+//        DaggerFriendsFragmentComponent
+//            .builder()
+//            .friendsFragmentModule(FriendsFragmentModule())
+//            .build()
+//            .injectFriendsFragment(this)
+//        viewModel = viewModelFactory.let { ViewModelProvider(this, it).get(FriendsViewModel::class.java) }
+        viewModel = ViewModelProvider(this, NewFactory()).get(FriendsViewModel::class.java)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,

@@ -22,6 +22,8 @@ import com.practice.socialclient.model.logger.ILog
 import com.practice.socialclient.model.logger.Logger
 import com.practice.socialclient.model.twitter.TwitterConstants
 import com.practice.socialclient.ui.arch.MvvmFragment
+import com.practice.socialclient.ui.friends.FriendsViewModel
+import com.practice.socialclient.ui.friends.NewFactory
 
 import javax.inject.Inject
 
@@ -33,18 +35,19 @@ class LoginFragment : MvvmFragment<LoginContract.Host>() {
     private lateinit var btnFBLogin: LoginButton
     private lateinit var twitterDialog: Dialog
 
-    @Inject
+//    @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
     private lateinit var viewModel: LoginContract.BaseViewModel
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        DaggerLoginFragmentComponent.builder()
-            .loginFragmentModule(LoginFragmentModule())
-            .build()
-            .injectLoginFragment(this)
-        viewModel =
-            viewModelFactory.let { ViewModelProvider(this, it).get(LoginViewModel::class.java) }
+//        DaggerLoginFragmentComponent.builder()
+//            .loginFragmentModule(LoginFragmentModule())
+//            .build()
+//            .injectLoginFragment(this)
+//        viewModel =
+//            viewModelFactory.let { ViewModelProvider(this, it).get(LoginViewModel::class.java) }
+        viewModel = ViewModelProvider(this, NewLoginFactory()).get(LoginViewModel::class.java)
     }
 
     override fun onCreateView(

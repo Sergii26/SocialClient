@@ -3,6 +3,7 @@ package com.practice.socialclient.ui.splash
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.facebook.login.LoginManager
 import com.practice.socialclient.model.logger.ILog
 import com.practice.socialclient.model.network_api.twitter.TwitterNetworkClient
 import com.practice.socialclient.model.prefs.Prefs
@@ -14,8 +15,9 @@ import io.reactivex.schedulers.Schedulers
 import twitter4j.Twitter
 import twitter4j.auth.AccessToken
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
-class SplashViewModel(private val logger: ILog, private val twitterClient: Twitter, private val prefs: Prefs,
+class SplashViewModel @Inject constructor(private val logger: ILog, private val twitterClient: Twitter, private val prefs: Prefs,
 private val twitterNetworkClient: TwitterNetworkClient) : ViewModel(), SplashContract.BaseSplashViewModel {
     private val isLoggedIn = MutableLiveData<Boolean>()
     private val compositeDisposable = CompositeDisposable()
@@ -28,7 +30,9 @@ private val twitterNetworkClient: TwitterNetworkClient) : ViewModel(), SplashCon
         compositeDisposable.add(Observable.timer(1, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ checkLoginStates() },
+                .subscribe({
+//                    logout()
+                    checkLoginStates() },
                  { throwable: Throwable -> logger.log("SplashViewModel startTimer() error: " + throwable.message) }))
     }
 
@@ -47,14 +51,28 @@ private val twitterNetworkClient: TwitterNetworkClient) : ViewModel(), SplashCon
             .subscribe({ result ->
                 logger.log("checkLoginStates() result: " + result)
                 prefs.putIsTwLoggedIn(true)
+                logger.log("LoginViewModel twitter hashCode: ${twitterClient.hashCode()}")
                 isLoggedIn.value = true
             },
                 { error ->
                     prefs.putIsTwLoggedIn(false)
                     isLoggedIn.value = prefs.getIsFbLoggedIn()
+                    logger.log("SplashViewModel twitter hashCode: ${twitterClient.hashCode()}")
                     logger.log("isTwitterLoggedIn() on error: " + error.message)
                 }
             ))
+    }
+
+    private fun logout(){
+        logger.log("MainActivityViewModel logOut()")
+        prefs.putIsTwLoggedIn(false)
+        prefs.putTwitterAuthSecret("")
+        prefs.putTwitterAuthToken("")
+        twitterClient.oAuthAccessToken = null
+        prefs.putIsFbLoggedIn(false)
+        prefs.putFbUserName("")
+        prefs.putFbUserIcon("")
+        LoginManager.getInstance().logOut()
     }
 
     override fun onCleared() {

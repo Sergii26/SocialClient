@@ -27,7 +27,9 @@ import com.practice.socialclient.model.logger.Logger
 import com.practice.socialclient.model.pojo.UserInfo
 import com.practice.socialclient.ui.arch.Contract
 import com.practice.socialclient.ui.login.LoginContract
+import com.practice.socialclient.ui.splash.NewSplashFactory
 import com.practice.socialclient.ui.splash.SplashContract
+import com.practice.socialclient.ui.splash.SplashViewModel
 import javax.inject.Inject
 
 
@@ -41,7 +43,7 @@ class MainActivity : AppCompatActivity(), Contract.Host, SplashContract.Host, Lo
     private lateinit var navigationView: NavigationView
     private var actionBar: ActionBar? = null
 
-    @Inject
+//    @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private lateinit var viewModel: MainActivityContract.BaseMainActivityViewModel
@@ -49,11 +51,11 @@ class MainActivity : AppCompatActivity(), Contract.Host, SplashContract.Host, Lo
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        DaggerMainActivityComponent
-            .builder()
-            .mainActivityModule(MainActivityModule())
-            .build()
-            .injectContentActivity(this)
+//        DaggerMainActivityComponent
+//            .builder()
+//            .mainActivityModule(MainActivityModule())
+//            .build()
+//            .injectContentActivity(this)
 
         navController = findNavController(R.id.nav_host_fragment)
         drawerLayout = findViewById(R.id.drawer_layout)
@@ -71,8 +73,8 @@ class MainActivity : AppCompatActivity(), Contract.Host, SplashContract.Host, Lo
         actionBar = supportActionBar
         val navMenu = navigationView.menu
 
-        viewModel = viewModelFactory.let { ViewModelProvider(this, it).get(MainActivityViewModel::class.java)}
-
+//        viewModel = viewModelFactory.let { ViewModelProvider(this, it).get(MainActivityViewModel::class.java)}
+        viewModel = ViewModelProvider(this, NewMainFactory()).get(MainActivityViewModel::class.java)
         viewModel.checkInternetConnection()
         viewModel.getFbUserData().observe(this, { it ->
             logger.log("MainActivity observe FB USer - name: ${it.name}, iconUrl: ${it.iconUrl}")

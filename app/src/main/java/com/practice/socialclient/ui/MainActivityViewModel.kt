@@ -16,8 +16,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import twitter4j.Twitter
+import javax.inject.Inject
 
-class MainActivityViewModel(
+class MainActivityViewModel @Inject constructor(
     private val logger: ILog, private val facebookNetworkClient: FacebookNetworkClient,
     private val twitterNetworkClient: TwitterNetworkClient, private val prefs: Prefs, private val twitterClient: Twitter,
     private val androidUtils: Utils
@@ -100,6 +101,11 @@ class MainActivityViewModel(
 
     private fun downloadTwUserData() {
         logger.log("MainActivityViewModel downloadTwUserData()")
+        logger.log("MainActivityViewModel twitter hashCode: ${twitterClient.hashCode()}")
+//        logger.log("MainActivityViewModel downloadTwUserData() twitterClient.oAuth2Token = ${twitterClient.oAuth2Token}")
+//        logger.log("MainActivityViewModel downloadTwUserData() twitterClient.oAuthAccessToken = ${twitterClient.oAuthAccessToken}")
+//        logger.log("MainActivityViewModel downloadTwUserData() twitterClient.authorization = ${twitterClient.authorization.toString()}")
+
         compositeDisposable.add(twitterNetworkClient.getUserData(twitterClient)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())

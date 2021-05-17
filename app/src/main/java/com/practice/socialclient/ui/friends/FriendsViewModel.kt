@@ -16,14 +16,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import twitter4j.Twitter
+import javax.inject.Inject
 
-class FriendsViewModel(
-    private val logger: ILog, private val facebookNetworkClient: FacebookNetworkClient,
+class FriendsViewModel @Inject constructor(private val logger: ILog, private val facebookNetworkClient: FacebookNetworkClient,
     private val twitterNetworkClient: TwitterNetworkClient, private val twitterClient: Twitter,
-    private val prefs: Prefs, private val androidUtils: Utils
-) :
-    ViewModel(),
-    Contract.BaseViewModel {
+    private val prefs: Prefs, private val androidUtils: Utils): ViewModel(), Contract.BaseViewModel {
 
     private val compositeDisposable = CompositeDisposable()
     private val fbFriendsList = MutableLiveData<MutableList<FriendInfo>>()

@@ -12,13 +12,15 @@ import com.practice.socialclient.R
 import com.practice.socialclient.model.logger.Logger
 import com.practice.socialclient.ui.arch.MvvmFragment
 import com.practice.socialclient.ui.listener.EndlessScrollListener
+import com.practice.socialclient.ui.login.LoginViewModel
+import com.practice.socialclient.ui.login.NewLoginFactory
 import com.practice.socialclient.ui.news.Contract
 import javax.inject.Inject
 
 
 class PhotosFragment :  MvvmFragment<Contract.Host>() {
 
-    @Inject
+//    @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
     private lateinit var viewModel: PhotosViewModel
     private lateinit var rvTwPhotos: RecyclerView
@@ -41,13 +43,14 @@ class PhotosFragment :  MvvmFragment<Contract.Host>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        DaggerPhotosFragmentComponent
-            .builder()
-            .photosFragmentModule(PhotosFragmentModule())
-            .build()
-            .injectPhotosFragment(this)
-        viewModel =
-            viewModelFactory.let { ViewModelProvider(this, it).get(PhotosViewModel::class.java) }
+//        DaggerPhotosFragmentComponent
+//            .builder()
+//            .photosFragmentModule(PhotosFragmentModule())
+//            .build()
+//            .injectPhotosFragment(this)
+//        viewModel =
+//            viewModelFactory.let { ViewModelProvider(this, it).get(PhotosViewModel::class.java) }
+        viewModel = ViewModelProvider(this, NewPhotosFactory()).get(PhotosViewModel::class.java)
     }
 
     override fun onCreateView(

@@ -17,9 +17,10 @@ import io.reactivex.schedulers.Schedulers
 import twitter4j.Twitter
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 import kotlin.collections.ArrayList
 
-class NewsViewModel(
+class NewsViewModel @Inject constructor(
     private val logger: ILog, private val facebookNetworkClient: FacebookNetworkClient,
     private val twitterNetworkClient: TwitterNetworkClient, private val twitterClient: Twitter,
     private val prefs: Prefs, private val androidUtils: Utils
@@ -67,6 +68,7 @@ class NewsViewModel(
     }
 
     override fun downloadNews() {
+        setCurrentTwLoginState()
         logger.log("NewsViewModel downloadNews")
         if(!androidUtils.isConnectedToNetwork){
             internetState.value = false
@@ -104,6 +106,16 @@ class NewsViewModel(
                 },
                     { error -> logger.log("getFbNews() error: " + error?.message) })
         )
+    }
+
+    private fun setCurrentTwLoginState() {
+        if(prefs.getTwitterAuthSecret().isNotEmpty()) {
+            twitterClient.oAuthAccessToken =
+                twitter4j.auth.AccessToken(
+                    prefs.getTwitterAuthToken(),
+                    prefs.getTwitterAuthSecret()
+                )
+        }
     }
 
     private fun getTwNews() {

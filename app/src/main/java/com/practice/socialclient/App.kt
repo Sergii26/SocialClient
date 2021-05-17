@@ -10,18 +10,25 @@ import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
 class App : MultiDexApplication(){
-    var appComponent: AppComponent? = null
+
+//    var appComponent: AppComponent? = null
     val appContext: Context
         get() = this.applicationContext
 
     override fun onCreate() {
         super.onCreate()
         instance = this
-        appComponent = DaggerAppComponent.create()
+//        appComponent = DaggerAppComponent.create()
+        appModule = AppModuleImpl()
     }
+
+//    fun getAppModule(): NewAppModule?{
+//        return appModule
+//    }
 
     companion object {
         var instance: App? = null
             private set
+        var appModule: NewAppModule? = null
     }
 }

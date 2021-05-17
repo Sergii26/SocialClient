@@ -14,12 +14,14 @@ import com.practice.socialclient.model.logger.Logger
 import com.practice.socialclient.model.pojo.NewsInfo
 import com.practice.socialclient.ui.arch.MvvmFragment
 import com.practice.socialclient.ui.listener.EndlessScrollListener
+import com.practice.socialclient.ui.login.LoginViewModel
+import com.practice.socialclient.ui.login.NewLoginFactory
 import javax.inject.Inject
 
 
 class NewsFragment : MvvmFragment<Contract.Host>() {
     private val logger: ILog = Logger.withTag("MyLog")
-    @Inject
+//    @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
     private lateinit var viewModel: NewsViewModel
     private lateinit var rvNews: RecyclerView
@@ -35,13 +37,14 @@ class NewsFragment : MvvmFragment<Contract.Host>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        DaggerNewsFragmentComponent
-            .builder()
-            .newsFragmentModule(NewsFragmentModule())
-            .build()
-            .injectNewsFragment(this)
-        viewModel =
-            viewModelFactory.let { ViewModelProvider(this, it).get(NewsViewModel::class.java) }
+//        DaggerNewsFragmentComponent
+//            .builder()
+//            .newsFragmentModule(NewsFragmentModule())
+//            .build()
+//            .injectNewsFragment(this)
+//        viewModel =
+//            viewModelFactory.let { ViewModelProvider(this, it).get(NewsViewModel::class.java) }
+        viewModel = ViewModelProvider(this, NewNewsFactory()).get(NewsViewModel::class.java)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle? ): View? {

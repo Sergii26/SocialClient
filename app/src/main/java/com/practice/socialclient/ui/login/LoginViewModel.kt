@@ -24,9 +24,10 @@ import twitter4j.auth.AccessToken
 import twitter4j.auth.OAuthAuthorization
 import twitter4j.conf.Configuration
 import twitter4j.conf.ConfigurationBuilder
+import javax.inject.Inject
 
 
-class LoginViewModel(
+class LoginViewModel @Inject constructor (
     private val logger: ILog,
     private val prefs: Prefs,
     private val twitterClient: Twitter,
@@ -100,8 +101,10 @@ class LoginViewModel(
             .subscribe { result ->
                 prefs.putTwitterAuthToken(result.token)
                 prefs.putTwitterAuthSecret(result.tokenSecret)
+
                 twitterAccessToken = result
                 prefs.putIsTwLoggedIn(true)
+                logger.log("LoginViewModel twitter hashCode: ${twitterClient.hashCode()}")
             })
 
     }
