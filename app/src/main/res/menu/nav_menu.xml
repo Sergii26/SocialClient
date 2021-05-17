@@ -15,6 +15,7 @@
             android:icon="@drawable/icon_photos"
             android:title="@string/menu_item_photos_label" />
     </group>
+
     <item android:title="@string/menu_item_account_label">
         <menu>
             <item

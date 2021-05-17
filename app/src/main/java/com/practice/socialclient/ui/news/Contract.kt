@@ -11,11 +11,12 @@ interface Contract {
         fun getNextPage()
         fun getInternetState(): MutableLiveData<Boolean>
         fun onRefresh()
-        fun getTernOffRefreshing() : MutableLiveData<Boolean>
+        fun getTernOffRefreshing(): MutableLiveData<Boolean>
         fun checkInternetConnection()
         fun clearNewsList()
     }
-    interface Host : Contract.Host{
+
+    interface Host : Contract.Host {
         fun downloadUserData()
     }
 }

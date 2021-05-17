@@ -12,14 +12,14 @@ interface Contract {
         fun getFbUserPhotos(): MutableLiveData<MutableList<String>>
         fun getTwUserPhotos(): MutableLiveData<MutableList<String>>
         fun onRefresh()
-        fun getTernOffRefreshing() : MutableLiveData<Boolean>
+        fun getTernOffRefreshing(): MutableLiveData<Boolean>
         fun getInternetState(): MutableLiveData<Boolean>
         fun checkInternetConnection()
         fun clearTwPhotosList()
         fun clearFbPhotosList()
     }
 
-    interface Host : Contract.Host{
+    interface Host : Contract.Host {
         fun downloadUserData()
     }
 }

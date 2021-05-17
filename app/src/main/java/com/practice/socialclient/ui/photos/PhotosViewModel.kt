@@ -44,6 +44,7 @@ class PhotosViewModel @Inject constructor(
     override fun getInternetState(): MutableLiveData<Boolean> {
         return internetState
     }
+
     override fun checkInternetConnection() {
         internetState.value = androidUtils.isConnectedToNetwork
     }
@@ -68,8 +69,11 @@ class PhotosViewModel @Inject constructor(
 
     private fun getFbPhotos() {
         logger.log("PhotosViewModel getFbPhotos")
-        compositeDisposable.add(facebookNetworkClient.getUserPhotos(AccessToken.getCurrentAccessToken().token,
-                photosLimit.toString())
+        compositeDisposable.add(
+            facebookNetworkClient.getUserPhotos(
+                AccessToken.getCurrentAccessToken().token,
+                photosLimit.toString()
+            )
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -121,8 +125,10 @@ class PhotosViewModel @Inject constructor(
             return
         }
         compositeDisposable.add(
-            facebookNetworkClient.getNextUserPhotosPage(AccessToken.getCurrentAccessToken().token, fbCursor,
-                photosLimit.toString())
+            facebookNetworkClient.getNextUserPhotosPage(
+                AccessToken.getCurrentAccessToken().token, fbCursor,
+                photosLimit.toString()
+            )
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -152,7 +158,11 @@ class PhotosViewModel @Inject constructor(
             return
         }
         compositeDisposable.add(
-            twitterNetworkClient.getUserTweetsOlderThan(lastTweetId, photosLimit.toString(), twitterClient)
+            twitterNetworkClient.getUserTweetsOlderThan(
+                lastTweetId,
+                photosLimit.toString(),
+                twitterClient
+            )
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ result ->

@@ -13,6 +13,5 @@ interface MainActivityContract {
         fun checkInternetConnection()
     }
 
-    interface Host{
-    }
+    interface Host
 }

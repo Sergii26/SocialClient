@@ -21,7 +21,7 @@ import javax.inject.Singleton
 
 
 @Module
-class AppModuleImpl(): NewAppModule {
+class AppModuleImpl(): AppModule {
     @Provides
     @Singleton
     override fun provideNetworkClient(): FacebookNetworkClient {

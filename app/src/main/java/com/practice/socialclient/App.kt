@@ -1,34 +1,25 @@
 package com.practice.socialclient
 
-import android.app.Application
 import android.content.Context
 import androidx.multidex.MultiDexApplication
-import com.practice.socialclient.model.logger.Logger
-import io.reactivex.Observable
-import io.reactivex.Single
-import io.reactivex.schedulers.Schedulers
-import java.util.concurrent.TimeUnit
 
-class App : MultiDexApplication(){
 
-//    var appComponent: AppComponent? = null
+
+class App : MultiDexApplication() {
+
     val appContext: Context
         get() = this.applicationContext
 
     override fun onCreate() {
         super.onCreate()
         instance = this
-//        appComponent = DaggerAppComponent.create()
+
         appModule = AppModuleImpl()
     }
-
-//    fun getAppModule(): NewAppModule?{
-//        return appModule
-//    }
 
     companion object {
         var instance: App? = null
             private set
-        var appModule: NewAppModule? = null
+        var appModule: AppModule? = null
     }
 }

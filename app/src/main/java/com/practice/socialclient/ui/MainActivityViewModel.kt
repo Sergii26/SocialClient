@@ -7,7 +7,7 @@ import com.facebook.login.LoginManager
 import com.practice.socialclient.model.logger.ILog
 import com.practice.socialclient.model.network_api.facebook.FacebookNetworkClient
 import com.practice.socialclient.model.network_api.twitter.TwitterNetworkClient
-import com.practice.socialclient.model.pojo.*
+import com.practice.socialclient.model.pojo.UserInfo
 import com.practice.socialclient.model.pojo.facebook_pojo.UserDataResponse
 import com.practice.socialclient.model.pojo.twitter_pojo.User
 import com.practice.socialclient.model.prefs.Prefs
@@ -18,12 +18,12 @@ import io.reactivex.schedulers.Schedulers
 import twitter4j.Twitter
 import javax.inject.Inject
 
+
 class MainActivityViewModel @Inject constructor(
     private val logger: ILog, private val facebookNetworkClient: FacebookNetworkClient,
     private val twitterNetworkClient: TwitterNetworkClient, private val prefs: Prefs, private val twitterClient: Twitter,
     private val androidUtils: Utils
-) :
-    ViewModel(), MainActivityContract.BaseMainActivityViewModel {
+) : ViewModel(), MainActivityContract.BaseMainActivityViewModel {
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
     private val fbUserData = MutableLiveData<UserInfo>()
     private val twUserData = MutableLiveData<UserInfo>()
@@ -37,7 +37,7 @@ class MainActivityViewModel @Inject constructor(
         return twUserData
     }
 
-    override fun getInternetState(): MutableLiveData<Boolean>{
+    override fun getInternetState(): MutableLiveData<Boolean> {
         return internetState
     }
 
@@ -46,7 +46,7 @@ class MainActivityViewModel @Inject constructor(
     }
 
     override fun getUserData() {
-        if(!androidUtils.isConnectedToNetwork){
+        if (!androidUtils.isConnectedToNetwork) {
             internetState.value = false
             return
         }
@@ -54,12 +54,12 @@ class MainActivityViewModel @Inject constructor(
         if (prefs.getIsFbLoggedIn()) {
             downloadFbUserData()
         } else {
-            fbUserData.value = UserInfo("","")
+            fbUserData.value = UserInfo("", "")
         }
         if (prefs.getIsTwLoggedIn()) {
             downloadTwUserData()
         } else {
-            twUserData.value = UserInfo("","")
+            twUserData.value = UserInfo("", "")
         }
     }
 
@@ -77,7 +77,7 @@ class MainActivityViewModel @Inject constructor(
 
     private fun downloadFbUserData() {
         logger.log("MainActivityViewModel downloadFbUserData()")
-        if(AccessToken.getCurrentAccessToken().token.isNullOrEmpty()){
+        if (AccessToken.getCurrentAccessToken().token.isNullOrEmpty()) {
             prefs.putIsFbLoggedIn(false)
             prefs.putFbUserName("")
             prefs.putFbUserIcon("")
@@ -110,8 +110,10 @@ class MainActivityViewModel @Inject constructor(
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe({ response: User ->
-                logger.log("MainActivityViewModel downloadTwUserData() user name: ${response.name.toString()}, " +
-                        "user icon: ${response.profileImageUrlHttps.toString()}")
+                logger.log(
+                    "MainActivityViewModel downloadTwUserData() user name: ${response.name.toString()}, " +
+                            "user icon: ${response.profileImageUrlHttps.toString()}"
+                )
                 twUserData.value = UserInfo(
                     response.name.toString(),
                     response.profileImageUrlHttps.toString()

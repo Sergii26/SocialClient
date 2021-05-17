@@ -1,11 +1,9 @@
 package com.practice.socialclient.ui
 
-
 import android.os.Bundle
 import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
@@ -27,15 +25,13 @@ import com.practice.socialclient.model.logger.Logger
 import com.practice.socialclient.model.pojo.UserInfo
 import com.practice.socialclient.ui.arch.Contract
 import com.practice.socialclient.ui.login.LoginContract
-import com.practice.socialclient.ui.splash.NewSplashFactory
 import com.practice.socialclient.ui.splash.SplashContract
-import com.practice.socialclient.ui.splash.SplashViewModel
-import javax.inject.Inject
-
 
 class MainActivity : AppCompatActivity(), Contract.Host, SplashContract.Host, LoginContract.Host,
-    com.practice.socialclient.ui.news.Contract.Host, com.practice.socialclient.ui.friends.Contract.Host,
-    com.practice.socialclient.ui.photos.Contract.Host, NavigationView.OnNavigationItemSelectedListener {
+    com.practice.socialclient.ui.news.Contract.Host,
+    com.practice.socialclient.ui.friends.Contract.Host,
+    com.practice.socialclient.ui.photos.Contract.Host,
+    NavigationView.OnNavigationItemSelectedListener {
     private val logger: ILog = Logger.withTag("MyLog")
     private lateinit var navController: NavController
     private lateinit var drawerLayout: DrawerLayout
@@ -73,12 +69,22 @@ class MainActivity : AppCompatActivity(), Contract.Host, SplashContract.Host, Lo
         actionBar = supportActionBar
         val navMenu = navigationView.menu
 
+
 //        viewModel = viewModelFactory.let { ViewModelProvider(this, it).get(MainActivityViewModel::class.java)}
-        viewModel = ViewModelProvider(this, NewMainFactory()).get(MainActivityViewModel::class.java)
+        viewModel = ViewModelProvider(this, MainActivityViewModelFactory()).get(MainActivityViewModel::class.java)
+
+//        viewModel = viewModelFactory.let {
+//            ViewModelProvider(
+//                this,
+//                it
+//            ).get(MainActivityViewModel::class.java)
+//        }
+
+
         viewModel.checkInternetConnection()
         viewModel.getFbUserData().observe(this, { it ->
             logger.log("MainActivity observe FB USer - name: ${it.name}, iconUrl: ${it.iconUrl}")
-            if(it.name.isEmpty() && it.iconUrl.isEmpty()){
+            if (it.name.isEmpty() && it.iconUrl.isEmpty()) {
                 findViewById<CardView>(R.id.cvFbUserPhoto)?.let { it.visibility = View.INVISIBLE }
                 navMenu.findItem(R.id.fbLogin).isVisible = true
                 headerBinding.fbUserData = UserInfo(getString(R.string.login_to_facebook), "")
@@ -91,7 +97,7 @@ class MainActivity : AppCompatActivity(), Contract.Host, SplashContract.Host, Lo
 
         viewModel.getTwUserData().observe(this, { it ->
             logger.log("MainActivity observe TW USer - name: ${it.name}, iconUrl: ${it.iconUrl}")
-            if(it.name.isEmpty() && it.iconUrl.isEmpty()){
+            if (it.name.isEmpty() && it.iconUrl.isEmpty()) {
                 findViewById<CardView>(R.id.cvTwUserPhoto)?.let { it.visibility = View.INVISIBLE }
                 navMenu.findItem(R.id.twLogin).isVisible = true
                 headerBinding.twUserData = UserInfo(getString(R.string.login_to_twitter), "")
@@ -103,7 +109,7 @@ class MainActivity : AppCompatActivity(), Contract.Host, SplashContract.Host, Lo
         })
 
         viewModel.getInternetState().observe(this, {
-            if(!it) Toast.makeText(this, R.string.no_internet, Toast.LENGTH_LONG).show()
+            if (!it) Toast.makeText(this, R.string.no_internet, Toast.LENGTH_LONG).show()
         })
 
         if (savedInstanceState == null || navController.currentDestination?.id == R.id.splashFragment) {
@@ -116,7 +122,7 @@ class MainActivity : AppCompatActivity(), Contract.Host, SplashContract.Host, Lo
             showNavigationMenu()
         }
 
-        if(savedInstanceState != null && navController.currentDestination?.id == R.id.loginFragment){
+        if (savedInstanceState != null && navController.currentDestination?.id == R.id.loginFragment) {
             hideNavigationMenu()
         }
     }

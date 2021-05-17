@@ -6,7 +6,8 @@ import com.practice.socialclient.model.pojo.FriendsCountInfo
 import com.practice.socialclient.ui.arch.Contract
 
 interface Contract {
-    interface BaseViewModel{
+
+    interface BaseViewModel {
         fun getFriends()
         fun getFbFriendsList(): MutableLiveData<MutableList<FriendInfo>>
         fun getTwFriendsList(): MutableLiveData<MutableList<FriendInfo>>
@@ -17,12 +18,12 @@ interface Contract {
         fun getNextFbPage()
         fun getNextTwPage()
         fun onRefresh()
-        fun getTernOffRefreshing() : MutableLiveData<Boolean>
+        fun getTernOffRefreshing(): MutableLiveData<Boolean>
         fun getInternetState(): MutableLiveData<Boolean>
         fun checkInternetConnection()
-
     }
-    interface Host : Contract.Host{
+
+    interface Host : Contract.Host {
         fun downloadUserData()
     }
 }

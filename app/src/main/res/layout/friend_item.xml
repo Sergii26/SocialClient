@@ -42,7 +42,9 @@
                     android:src="@{friend.source}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
+
         </androidx.cardview.widget.CardView>
 
         <TextView
@@ -55,6 +57,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/cvImage"
             app:layout_constraintStart_toEndOf="@+id/cvImage"
             app:layout_constraintTop_toTopOf="@+id/cvImage" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

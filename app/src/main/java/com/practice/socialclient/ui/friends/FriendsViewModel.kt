@@ -46,7 +46,7 @@ class FriendsViewModel @Inject constructor(private val logger: ILog, private val
         return twFriendsList
     }
 
-    override fun getTernOffRefreshing() : MutableLiveData<Boolean>{
+    override fun getTernOffRefreshing(): MutableLiveData<Boolean> {
         return turnOffRefreshing
     }
 
@@ -68,7 +68,7 @@ class FriendsViewModel @Inject constructor(private val logger: ILog, private val
 
     override fun getFriendsTotalCount() {
         logger.log("FriendsViewModel getFriendsCount()")
-        if(!androidUtils.isConnectedToNetwork){
+        if (!androidUtils.isConnectedToNetwork) {
             internetState.value = false
             return
         }
@@ -117,7 +117,7 @@ class FriendsViewModel @Inject constructor(private val logger: ILog, private val
 
     override fun getFriends() {
         logger.log("FriendsViewModel getFriends()")
-        if(!androidUtils.isConnectedToNetwork){
+        if (!androidUtils.isConnectedToNetwork) {
             internetState.value = false
             return
         }
@@ -172,7 +172,7 @@ class FriendsViewModel @Inject constructor(private val logger: ILog, private val
 
     override fun getNextFbPage() {
         logger.log("FriendsViewModel getNextFbPage()")
-        if(!androidUtils.isConnectedToNetwork){
+        if (!androidUtils.isConnectedToNetwork) {
             internetState.value = false
             return
         }
@@ -205,7 +205,7 @@ class FriendsViewModel @Inject constructor(private val logger: ILog, private val
 
     override fun getNextTwPage() {
         logger.log("FriendsViewModel getNextTwPage()")
-        if(!androidUtils.isConnectedToNetwork){
+        if (!androidUtils.isConnectedToNetwork) {
             internetState.value = false
             return
         }
@@ -230,7 +230,7 @@ class FriendsViewModel @Inject constructor(private val logger: ILog, private val
         twCursor = ""
         fbCursor = ""
         turnOffRefreshing.value = true
-        if(androidUtils.isConnectedToNetwork){
+        if (androidUtils.isConnectedToNetwork) {
             getFriendsTotalCount()
             getFriends()
         } else {

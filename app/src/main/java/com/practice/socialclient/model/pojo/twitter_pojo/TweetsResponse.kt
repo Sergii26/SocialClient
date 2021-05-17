@@ -12,5 +12,5 @@ data class TweetsResponse(
     @SerializedName("user") @Expose var user: User?,
     @SerializedName("favorite_count") @Expose var likeCount: Int?,
     @SerializedName("retweet_count") @Expose var retweetCount: Int?,
-    @SerializedName("id") @Expose var id: Long?,
+    @SerializedName("id") @Expose var id: Long?
 )

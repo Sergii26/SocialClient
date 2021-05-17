@@ -13,23 +13,23 @@ class PhotosListAdapter : RecyclerView.Adapter<PhotosListAdapter.PhotoViewHolder
     private val photoList: MutableList<String> = ArrayList()
     private val logger = Logger.withTag("MyLog")
 
-    fun getPhotoList():MutableList<String> {
+    fun getPhotoList(): MutableList<String> {
         return photoList
     }
 
-    fun setPhotoList(photoList: MutableList<String>){
+    fun setPhotoList(photoList: MutableList<String>) {
         this.photoList.clear()
         this.photoList.addAll(photoList)
         this.notifyDataSetChanged()
     }
 
-    fun addNewPhotosToList(photoList: MutableList<String>){
+    fun addNewPhotosToList(photoList: MutableList<String>) {
         this.photoList.addAll(photoList)
         logger.log("PhotoAdapter addNewPhotosToList(), this.size : " + this.photoList.size)
         this.notifyDataSetChanged()
     }
 
-    fun clearPhotosList(){
+    fun clearPhotosList() {
         this.photoList.clear()
         this.notifyDataSetChanged()
     }

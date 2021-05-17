@@ -2,7 +2,10 @@ package com.practice.socialclient.model.network_api.twitter
 
 import com.google.gson.GsonBuilder
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import com.practice.socialclient.model.pojo.twitter_pojo.*
+import com.practice.socialclient.model.pojo.twitter_pojo.FriendsResponse
+import com.practice.socialclient.model.pojo.twitter_pojo.TweetsResponse
+import com.practice.socialclient.model.pojo.twitter_pojo.User
+import com.practice.socialclient.model.pojo.twitter_pojo.UserInformation
 import io.reactivex.Single
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -10,7 +13,6 @@ import twitter4j.HttpParameter
 import twitter4j.HttpRequest
 import twitter4j.RequestMethod
 import twitter4j.Twitter
-
 
 class TwitterApiClient : TwitterNetworkClient {
     private val retrofit: Retrofit
@@ -34,14 +36,19 @@ class TwitterApiClient : TwitterNetworkClient {
     }
 
     override fun getTweets(count: String, twitterClient: Twitter): Single<Array<TweetsResponse>> {
-        val parameters = arrayOf(HttpParameter("count", count), HttpParameter("tweet_mode", "extended"))
+        val parameters =
+            arrayOf(HttpParameter("count", count), HttpParameter("tweet_mode", "extended"))
         val requestUrl = "https://api.twitter.com/1.1/statuses/home_timeline.json"
         val authHeader = getTwAuthHeader(twitterClient, parameters, RequestMethod.GET, requestUrl)
         return apiService.getTweets(authHeader, count, "extended")
     }
 
-    override fun getUserTweets(count: String, twitterClient: Twitter): Single<Array<TweetsResponse>> {
-        val parameters = arrayOf(HttpParameter("count", count), HttpParameter("tweet_mode", "extended"))
+    override fun getUserTweets(
+        count: String,
+        twitterClient: Twitter
+    ): Single<Array<TweetsResponse>> {
+        val parameters =
+            arrayOf(HttpParameter("count", count), HttpParameter("tweet_mode", "extended"))
         val requestUrl = "https://api.twitter.com/1.1/statuses/user_timeline.json"
         val authHeader = getTwAuthHeader(twitterClient, parameters, RequestMethod.GET, requestUrl)
         return apiService.getUserTweets(authHeader, count, "extended")
@@ -53,8 +60,10 @@ class TwitterApiClient : TwitterNetworkClient {
         twitterClient: Twitter
     ): Single<Array<TweetsResponse>> {
 
-        val parameters = arrayOf(HttpParameter("count", count), HttpParameter("tweet_mode", "extended"),
-            HttpParameter("max_id", lastTweetId))
+        val parameters = arrayOf(
+            HttpParameter("count", count), HttpParameter("tweet_mode", "extended"),
+            HttpParameter("max_id", lastTweetId)
+        )
         val requestUrl = "https://api.twitter.com/1.1/statuses/user_timeline.json"
         val authHeader = getTwAuthHeader(twitterClient, parameters, RequestMethod.GET, requestUrl)
         return apiService.getUserTweetsOlderThan(authHeader, lastTweetId, count, "extended")
@@ -66,8 +75,10 @@ class TwitterApiClient : TwitterNetworkClient {
         twitterClient: Twitter
     ): Single<Array<TweetsResponse>> {
 
-        val parameters = arrayOf(HttpParameter("count", count), HttpParameter("tweet_mode", "extended"),
-            HttpParameter("max_id", lastTweetId))
+        val parameters = arrayOf(
+            HttpParameter("count", count), HttpParameter("tweet_mode", "extended"),
+            HttpParameter("max_id", lastTweetId)
+        )
         val requestUrl = "https://api.twitter.com/1.1/statuses/home_timeline.json"
         val authHeader = getTwAuthHeader(twitterClient, parameters, RequestMethod.GET, requestUrl)
         return apiService.getTweetsOlderThan(authHeader, lastTweetId, count, "extended")
@@ -110,7 +121,12 @@ class TwitterApiClient : TwitterNetworkClient {
         return apiService.isLoggedIn(authHeader)
     }
 
-    private fun getTwAuthHeader(twitterClient: Twitter, parameters: Array<HttpParameter>, requestMethod: RequestMethod, requestUrl: String): String {
+    private fun getTwAuthHeader(
+        twitterClient: Twitter,
+        parameters: Array<HttpParameter>,
+        requestMethod: RequestMethod,
+        requestUrl: String
+    ): String {
         return twitterClient.authorization.getAuthorizationHeader(
             HttpRequest(
                 requestMethod,
