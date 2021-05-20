@@ -3,17 +3,17 @@ package com.practice.socialclient.ui.login
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.facebook.CallbackManager
-import com.practice.socialclient.ui.arch.Contract
+import com.practice.socialclient.ui.arch.FragmentContract
 
 interface LoginContract {
-    interface Host : Contract.Host {
+    interface Host : FragmentContract.Host {
         fun openNewsFragment()
     }
 
-    interface BaseViewModel {
+    interface ViewModel : FragmentContract.ViewModel{
 
         fun checkLoginStates()
-        fun getLoginCheckingState(): MutableLiveData<String>
+        fun getLoginCheckingState(): LiveData<String>
         fun getRequestToken()
         fun twitterAuthUrl(): LiveData<String>
         fun handleUrl(url: String)

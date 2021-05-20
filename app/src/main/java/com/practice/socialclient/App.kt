@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.multidex.MultiDexApplication
 
 
-
 class App : MultiDexApplication() {
 
     val appContext: Context

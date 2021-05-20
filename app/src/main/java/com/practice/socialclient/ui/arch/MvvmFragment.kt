@@ -1,14 +1,18 @@
 package com.practice.socialclient.ui.arch
 
 import android.content.Context
+import android.os.Bundle
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.practice.socialclient.model.logger.ILog
+import com.practice.socialclient.model.logger.Log
 import com.practice.socialclient.model.logger.Logger
 import java.lang.reflect.ParameterizedType
 
-open class MvvmFragment<Host : Contract.Host?> : Fragment() {
-    private val logger: ILog = Logger.withTag("MyLog")
+abstract class MvvmFragment<
+        Host : FragmentContract.Host?,
+        VIEW_MODEL : FragmentContract.ViewModel
+        >: Fragment() {
+    private val logger: Log = Logger.withTag("MyLog")
     /**
      * get the current fragment call back
      *
@@ -18,6 +22,9 @@ open class MvvmFragment<Host : Contract.Host?> : Fragment() {
      * the fragment callBack
      */
     var callBack: Host? = null
+        private set
+
+    protected var model: VIEW_MODEL? = null
         private set
 
     //@Override
@@ -53,9 +60,24 @@ open class MvvmFragment<Host : Contract.Host?> : Fragment() {
         }
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setModel(createModel())
+        if (model != null) {
+            lifecycle.addObserver(model!!)
+
+        }
+    }
+
     override fun onDetach() {
         super.onDetach()
         // release the call back
         callBack = null
+    }
+
+    protected abstract fun createModel(): VIEW_MODEL
+
+    protected fun setModel(model: VIEW_MODEL) {
+        this.model = model
     }
 }

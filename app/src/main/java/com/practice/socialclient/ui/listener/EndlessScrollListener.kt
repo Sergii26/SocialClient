@@ -7,7 +7,7 @@ import java.util.*
 abstract class EndlessScrollListener : RecyclerView.OnScrollListener {
     // The minimum amount of items to have below your current scroll position
     // before loading more.
-    private val visibleThreshold = 3
+    private val visibleThreshold = 7
 
     // The current offset index of data you have loaded
     private var currentPage = 0

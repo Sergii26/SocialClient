@@ -2,15 +2,16 @@ package com.practice.socialclient.ui.splash
 
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LiveData
-import com.practice.socialclient.ui.arch.Contract
+import com.practice.socialclient.ui.arch.FragmentContract
 
 interface SplashContract {
-    interface BaseSplashViewModel : LifecycleObserver {
+    interface ViewModel : FragmentContract.ViewModel {
         fun startTimer()
-        fun getIsLoggedIn(): LiveData<Boolean>
+        fun getIsLoggedInObservable(): LiveData<Boolean>
+        fun getIsNotLoggedInObservable(): LiveData<Boolean>
     }
 
-    interface Host : Contract.Host {
+    interface Host : FragmentContract.Host {
         fun openLoginFragment()
         fun jumpToNewsFragment()
     }

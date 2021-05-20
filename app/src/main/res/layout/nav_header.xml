@@ -5,11 +5,11 @@
     <data>
         <variable
             name="fbUserData"
-            type="com.practice.socialclient.model.pojo.UserInfo" />
+            type="com.practice.socialclient.model.schemas.UserInfo" />
 
         <variable
             name="twUserData"
-            type="com.practice.socialclient.model.pojo.UserInfo" />
+            type="com.practice.socialclient.model.schemas.UserInfo" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

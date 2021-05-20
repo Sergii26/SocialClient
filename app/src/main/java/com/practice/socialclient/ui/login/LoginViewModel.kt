@@ -3,20 +3,19 @@ package com.practice.socialclient.ui.login
 import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
-import com.practice.socialclient.model.logger.ILog
+import com.practice.socialclient.model.logger.Log
 import com.practice.socialclient.model.network_api.twitter.TwitterNetworkClient
+import com.practice.socialclient.model.network_api.twitter.client.TwitterClient
 import com.practice.socialclient.model.prefs.Prefs
+import com.practice.socialclient.ui.arch.MvvmViewModel
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
 
@@ -24,12 +23,12 @@ import twitter4j.Twitter
 import javax.inject.Inject
 
 
-class LoginViewModel @Inject constructor (
-    private val logger: ILog,
+class LoginViewModel @Inject constructor(
+    private val logger: Log,
     private val prefs: Prefs,
-    private val twitterClient: Twitter,
+    private val twitterClient: TwitterClient,
     private val twitterNetworkClient: TwitterNetworkClient
-) : ViewModel(), LoginContract.BaseViewModel {
+) : MvvmViewModel(), LoginContract.ViewModel {
 
     companion object {
         const val FB_LOGIN_CHECKED = "facebook_login_checked"
@@ -38,12 +37,8 @@ class LoginViewModel @Inject constructor (
     }
 
     private val twitterAuthUrl: MutableLiveData<String> = MutableLiveData()
-
     private val loginStateChecked: MutableLiveData<String> = MutableLiveData()
-
-    private val compositeDisposable = CompositeDisposable()
     private var twitterAccessToken: twitter4j.auth.AccessToken? = null
-
     private lateinit var callbackManager: CallbackManager
     private var facebookAccessToken: com.facebook.AccessToken? = null
 
@@ -65,15 +60,22 @@ class LoginViewModel @Inject constructor (
         )
     }
 
+    override fun onAny(owner: LifecycleOwner?, event: Lifecycle.Event) {
+        super.onAny(owner, event)
+        if (event == Lifecycle.Event.ON_CREATE) {
+            launchFB()
+        }
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun getRequestToken() {
         logger.log("LoginViewModel getRequestToken()")
         if (prefs.getTwitterAuthSecret().isEmpty()) {
-            compositeDisposable.add(Single.fromCallable { twitterClient.oAuthRequestToken }
+            compositeDisposable.add(Single.fromCallable { twitterClient.getRequestToken() }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ result ->
-                    twitterAuthUrl.value = result.authorizationURL
+                    twitterAuthUrl.value = result?.authorizationURL
                 },
                     { error ->
                         logger.log("twitter authUrl error: " + error.message)
@@ -88,19 +90,18 @@ class LoginViewModel @Inject constructor (
         val oauthVerifier = uri.getQueryParameter("oauth_verifier") ?: ""
 
         compositeDisposable.add(Single.fromCallable {
-            twitterClient.getOAuthAccessToken(
+            twitterClient.getAccessToken(
                 oauthVerifier
             )
         }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { result ->
-                prefs.putTwitterAuthToken(result.token)
-                prefs.putTwitterAuthSecret(result.tokenSecret)
+                prefs.putTwitterAuthToken(result?.token.toString())
+                prefs.putTwitterAuthSecret(result?.tokenSecret.toString())
 
                 twitterAccessToken = result
                 prefs.putIsTwLoggedIn(true)
-                logger.log("LoginViewModel twitter hashCode: ${twitterClient.hashCode()}")
             })
     }
 
@@ -133,11 +134,7 @@ class LoginViewModel @Inject constructor (
 
     override fun checkLoginStates() {
         logger.log("LoginViewModel checkLoginStates()")
-        if (checkFBState()) {
-            prefs.putIsFbLoggedIn(true)
-        } else {
-            prefs.putIsFbLoggedIn(false)
-        }
+        prefs.putIsFbLoggedIn(checkFBState())
         loginStateChecked.value = FB_LOGIN_CHECKED
         setTwLoginState()
     }
@@ -149,7 +146,7 @@ class LoginViewModel @Inject constructor (
 
     private fun setTwLoginState() {
         logger.log("LoginViewModel setTwLoginState()")
-        compositeDisposable.add(twitterNetworkClient.isLoggedIn(twitterClient)
+        compositeDisposable.add(twitterNetworkClient.isLoggedIn()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ result ->
@@ -174,8 +171,4 @@ class LoginViewModel @Inject constructor (
             ))
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        compositeDisposable.clear()
-    }
 }

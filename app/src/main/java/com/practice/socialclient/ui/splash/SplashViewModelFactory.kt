@@ -9,7 +9,6 @@ class SplashViewModelFactory() : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         val viewModel: ViewModel
         viewModel = if (modelClass == SplashViewModel::class.java) {
-            
             DaggerSplashViewModelComponent.builder().appModule(App.appModule).build()
                 .createSplashModel()
         } else {

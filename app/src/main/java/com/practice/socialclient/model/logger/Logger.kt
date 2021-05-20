@@ -2,7 +2,8 @@ package com.practice.socialclient.model.logger
 
 import android.util.Log
 
-class Logger private constructor(private val TAG: String) : ILog {
+class Logger private constructor(private val TAG: String) :
+    com.practice.socialclient.model.logger.Log {
     private val priority: Int = Log.DEBUG
 
     override fun log(message: String?): Logger {

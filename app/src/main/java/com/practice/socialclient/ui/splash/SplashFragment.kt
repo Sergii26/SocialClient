@@ -6,29 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import com.practice.socialclient.R
-import com.practice.socialclient.model.logger.ILog
+import com.practice.socialclient.model.logger.Log
 import com.practice.socialclient.model.logger.Logger
 import com.practice.socialclient.ui.arch.MvvmFragment
 
-class SplashFragment : MvvmFragment<SplashContract.Host?>() {
-    private lateinit var viewModel: SplashContract.BaseSplashViewModel
-    private val logger: ILog = Logger.withTag("MyLog")
+class SplashFragment : MvvmFragment<SplashContract.Host?, SplashContract.ViewModel>() {
 
-//    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-//        DaggerSplashFragmentComponent.builder()
-//            .splashFragmentModule(SplashFragmentModule())
-//            .build()
-//            .injectSplashFragment(this)
-//
-//        viewModel = viewModelFactory.let { ViewModelProvider(this, it).get(SplashViewModel::class.java) }
-        viewModel = ViewModelProvider(this, SplashViewModelFactory()).get(SplashViewModel::class.java)
-
-    }
+    private val logger: Log = Logger.withTag("MyLog")
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -38,17 +22,22 @@ class SplashFragment : MvvmFragment<SplashContract.Host?>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.getIsLoggedIn().observe(viewLifecycleOwner, { isLoggedIn: Boolean ->
+        model!!.getIsLoggedInObservable().observe(viewLifecycleOwner, { isLoggedIn: Boolean ->
             logger.log("SplashFragment onReady() isReady= $isLoggedIn")
             if (hasCallBack()) {
-                if (isLoggedIn) {
-                    callBack!!.jumpToNewsFragment()
-                } else {
+                callBack!!.jumpToNewsFragment()
+            }
+        })
+
+        model!!.getIsNotLoggedInObservable().observe(viewLifecycleOwner, { isLoggedIn: Boolean ->
+            logger.log("SplashFragment onReady() isReady= $isLoggedIn")
+            if (hasCallBack()) {
                     callBack!!.openLoginFragment()
                 }
-            }
-
         })
-        viewModel.startTimer()
+    }
+
+    override fun createModel(): SplashContract.ViewModel {
+        return ViewModelProvider(this, SplashViewModelFactory()).get(SplashViewModel::class.java)
     }
 }

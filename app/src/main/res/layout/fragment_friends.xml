@@ -7,101 +7,65 @@
 
         <variable
             name="friendsCount"
-            type="com.practice.socialclient.model.pojo.FriendsCountInfo" />
-
-        <variable
-            name="Test"
-            type="com.practice.socialclient.model.pojo.FriendsCountInfo" />
+            type="com.practice.socialclient.model.schemas.FriendsCountInfo" />
     </data>
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipeRefreshLayout"
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:context=".ui.friends.FriendsFragment">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <TextView
+            android:id="@+id/tvFriendsCountLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:text="@{friendsCount.source}"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvFriendsCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{friendsCount.friendsCount}"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tvFriendsCountLabel"
+            app:layout_constraintStart_toEndOf="@+id/tvFriendsCountLabel"
+            app:layout_constraintTop_toTopOf="@+id/tvFriendsCountLabel" />
+
+        <View
+            android:id="@+id/tvDivider"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:context=".ui.friends.FriendsFragment">
+            android:layout_height="1dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:background="@color/colorPrimary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvFriendsCountLabel" />
 
-            <TextView
-                android:id="@+id/tvTwFriendsCountLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/tw_friends_count_label"
-                android:textSize="12sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/guideline"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tvTwFriendsCount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{friendsCount.twFriendsCount}"
-                android:textSize="12sp"
-                app:layout_constraintBottom_toBottomOf="@+id/tvTwFriendsCountLabel"
-                app:layout_constraintStart_toEndOf="@+id/tvTwFriendsCountLabel"
-                app:layout_constraintTop_toTopOf="@+id/tvTwFriendsCountLabel" />
-
-            <TextView
-                android:id="@+id/tvFbFriendsCountLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/fb_friends_count_label"
-                android:textSize="12sp"
-                app:layout_constraintEnd_toStartOf="@+id/guideline"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tvFbFriendsCount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{friendsCount.fbFriendsCount}"
-                android:textSize="12sp"
-                app:layout_constraintBottom_toBottomOf="@+id/tvFbFriendsCountLabel"
-                app:layout_constraintStart_toEndOf="@+id/tvFbFriendsCountLabel"
-                app:layout_constraintTop_toTopOf="@+id/tvFbFriendsCountLabel" />
-
-            <TextView
-                android:id="@+id/tvDivider"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="4dp"
-                android:background="@color/colorPrimary"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvTwFriendsCount" />
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefreshLayout"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvDivider">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvFbFriends"
+                android:id="@+id/rvFriends"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/guideline"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvDivider" />
+                android:layout_height="0dp"/>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvTwFriends"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/guideline"
-                app:layout_constraintTop_toBottomOf="@+id/tvDivider" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.5" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </layout>

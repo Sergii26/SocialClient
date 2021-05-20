@@ -2,6 +2,8 @@ package com.practice.socialclient.model.prefs
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKeys
 
 abstract class BasicPrefsImpl(protected val ctx: Context) {
     abstract val defaultPrefsFileName: String
@@ -9,7 +11,13 @@ abstract class BasicPrefsImpl(protected val ctx: Context) {
         protected get() = getPrefs(defaultPrefsFileName)
 
     protected fun getPrefs(fileName: String): SharedPreferences {
-        return ctx.getSharedPreferences(fileName, Context.MODE_PRIVATE)
+        val masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
+        return EncryptedSharedPreferences.create(
+            fileName,
+            masterKeyAlias,
+            ctx,
+            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM)
     }
 
     protected val editor: SharedPreferences.Editor

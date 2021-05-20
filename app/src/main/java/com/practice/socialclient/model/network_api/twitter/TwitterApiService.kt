@@ -1,9 +1,9 @@
 package com.practice.socialclient.model.network_api.twitter
 
-import com.practice.socialclient.model.pojo.twitter_pojo.FriendsResponse
-import com.practice.socialclient.model.pojo.twitter_pojo.TweetsResponse
-import com.practice.socialclient.model.pojo.twitter_pojo.User
-import com.practice.socialclient.model.pojo.twitter_pojo.UserInformation
+import com.practice.socialclient.model.network_api.twitter.schemas.FriendsResponse
+import com.practice.socialclient.model.network_api.twitter.schemas.TweetsResponse
+import com.practice.socialclient.model.network_api.twitter.schemas.User
+import com.practice.socialclient.model.network_api.twitter.schemas.UserInformation
 import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Header

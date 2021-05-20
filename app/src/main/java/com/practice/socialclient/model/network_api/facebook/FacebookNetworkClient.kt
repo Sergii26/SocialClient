@@ -1,9 +1,9 @@
 package com.practice.socialclient.model.network_api.facebook
 
-import com.practice.socialclient.model.pojo.facebook_pojo.NewsResponse
-import com.practice.socialclient.model.pojo.facebook_pojo.UserDataResponse
-import com.practice.socialclient.model.pojo.facebook_pojo.UserFriendsResponse
-import com.practice.socialclient.model.pojo.facebook_pojo.UserPhotosResponse
+import com.practice.socialclient.model.network_api.facebook.schemas.NewsResponse
+import com.practice.socialclient.model.network_api.facebook.schemas.UserDataResponse
+import com.practice.socialclient.model.network_api.facebook.schemas.UserFriendsResponse
+import com.practice.socialclient.model.network_api.facebook.schemas.UserPhotosResponse
 import io.reactivex.Single
 
 interface FacebookNetworkClient {
@@ -19,6 +19,6 @@ interface FacebookNetworkClient {
     ): Single<UserPhotosResponse>
 
     fun getUserNews(token: String?): Single<NewsResponse>
-    fun getNews(token: String?, limit: Int): Single<NewsResponse>
-    fun getNewsWithUntilTime(token: String?, limit: Int, until: String): Single<NewsResponse>
+    fun getNews(token: String?, limit: String): Single<NewsResponse>
+    fun getNewsWithUntilTime(token: String?, limit: String, until: String): Single<NewsResponse>
 }

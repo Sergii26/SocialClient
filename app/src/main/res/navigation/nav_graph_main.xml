@@ -28,7 +28,7 @@
     </fragment>
     <fragment
         android:id="@+id/newsFragment"
-        android:name="com.practice.socialclient.ui.news.NewsFragment"
+        android:name="com.practice.socialclient.ui.news.NewsPagerFragment"
         android:label="News"
         tools:layout="@layout/fragment_news" >
         <action
@@ -43,32 +43,35 @@
             app:popUpToInclusive="false" />
     </fragment>
     <fragment
-        android:id="@+id/friendsFragment"
-        android:name="com.practice.socialclient.ui.friends.FriendsFragment"
-        android:label="Friends" >
-        <action
-            android:id="@+id/action_friendsFragment_to_photosFragment"
-            app:destination="@id/photosFragment" />
-        <action
-            android:id="@+id/action_friendsFragment_to_newsFragment"
-            app:destination="@id/newsFragment" />
-        <action
-            android:id="@+id/action_friendsFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
-    </fragment>
-    <fragment
         android:id="@+id/photosFragment"
-        android:name="com.practice.socialclient.ui.photos.PhotosFragment"
+        android:name="com.practice.socialclient.ui.photos.PhotosPagerFragment"
         android:label="Photos"
-        tools:layout="@layout/fragment_photos" >
-        <action
-            android:id="@+id/action_photosFragment_to_friendsFragment"
-            app:destination="@id/friendsFragment" />
+        tools:layout="@layout/fragment_photos">
+
         <action
             android:id="@+id/action_photosFragment_to_newsFragment"
             app:destination="@id/newsFragment" />
         <action
             android:id="@+id/action_photosFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_photosFragment_to_friendsPagerFragment"
+            app:destination="@id/friendsFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/friendsFragment"
+        android:name="com.practice.socialclient.ui.friends.FriendsPagerFragment"
+        android:label="friends" >
+
+        <action
+            android:id="@+id/action_friendsPagerFragment_to_newsFragment"
+            app:destination="@id/newsFragment" />
+        <action
+            android:id="@+id/action_friendsPagerFragment_to_photosFragment"
+            app:destination="@id/photosFragment" />
+        <action
+            android:id="@+id/action_friendsPagerFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
+
 </navigation>
