@@ -60,7 +60,7 @@ class TwitterApiClient(private val twitterClient: TwitterClient) : TwitterNetwor
             .map { response -> convertTwNews(response) }
     }
 
-    override fun getUserTweets(
+    override fun getPhotos(
         count: String
     ): Single<List<PhotoInfo>> {
         val parameters =
@@ -71,7 +71,7 @@ class TwitterApiClient(private val twitterClient: TwitterClient) : TwitterNetwor
             .map { response -> convertTwPhotosResponse(response) }
     }
 
-    override fun getUserTweetsOlderThan(
+    override fun getPhotosOlderThan(
         lastTweetId: Long,
         count: String
     ): Single<List<PhotoInfo>> {

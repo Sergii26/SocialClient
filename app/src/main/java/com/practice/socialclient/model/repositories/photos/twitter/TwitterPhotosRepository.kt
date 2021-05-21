@@ -15,7 +15,7 @@ class TwitterPhotosRepository(
 
     override fun getPhotos(limit: String): Single<List<PhotoInfo>> {
         logger.log("TwitterPhotosRepository getPhotos")
-        return twitterNetworkClient.getUserTweets(limit)
+        return twitterNetworkClient.getPhotos(limit)
             .map { response ->
                 if (response[response.size - 1].cursor.isNotEmpty() && response[response.size - 1].cursor != "null") {
                     lastTweetId = response[response.size - 1].cursor.toLong()
@@ -31,7 +31,7 @@ class TwitterPhotosRepository(
             logger.log("TwitterPhotosRepository getNextPhotosPage no next page")
             return Single.just(ArrayList())
         }
-        return twitterNetworkClient.getUserTweetsOlderThan(lastTweetId, limit)
+        return twitterNetworkClient.getPhotosOlderThan(lastTweetId, limit)
             .map { response ->
                 val photosList: MutableList<PhotoInfo> = ArrayList()
                 if (response.size == 1) {

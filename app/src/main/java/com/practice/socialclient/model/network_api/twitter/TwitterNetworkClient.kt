@@ -5,9 +5,9 @@ import io.reactivex.Single
 
 interface TwitterNetworkClient {
     fun getTweets(count: String): Single<List<NewsInfo>>
-    fun getUserTweets(count: String): Single<List<PhotoInfo>>
+    fun getPhotos(count: String): Single<List<PhotoInfo>>
     fun getTweetsOlderThan(lastTweetId: Long, count: String): Single<List<NewsInfo>>
-    fun getUserTweetsOlderThan(lastTweetId: Long, count: String): Single<List<PhotoInfo>>
+    fun getPhotosOlderThan(lastTweetId: Long, count: String): Single<List<PhotoInfo>>
     fun getFriends(count: String): Single<List<FriendInfo>>
     fun getNextFriendsPage(count: String, cursor: String): Single<List<FriendInfo>>
     fun getFriendsCount(): Single<FriendsCountInfo>
