@@ -2,22 +2,20 @@ package com.practice.socialclient
 
 import com.practice.socialclient.model.logger.Log
 import com.practice.socialclient.model.logger.Logger
-import com.practice.socialclient.model.utils_login.LogOutUtil
-import com.practice.socialclient.model.utils_login.LogOutUtilImpl
-import com.practice.socialclient.model.utils_login.LoginStateUtil
-import com.practice.socialclient.model.utils_login.facebook.FacebookLoginStateUtil
-import com.practice.socialclient.model.utils_login.twitter.TwitterLoginStateUtil
-import com.practice.socialclient.model.network_api.facebook.FacebookApiClient
-import com.practice.socialclient.model.network_api.facebook.client.FacebookLoginManagerImpl
-import com.practice.socialclient.model.network_api.facebook.FacebookNetworkClient
-import com.practice.socialclient.model.network_api.facebook.client.FacebookLoginManager
-import com.practice.socialclient.model.network_api.twitter.TwitterApiClient
-import com.practice.socialclient.model.network_api.twitter.TwitterNetworkClient
-import com.practice.socialclient.model.network_api.twitter.client.TwitterClient
-import com.practice.socialclient.model.network_api.twitter.client.TwitterClientImpl
+import com.practice.socialclient.model.repositories.auth.AuthRepository
+import com.practice.socialclient.model.repositories.auth.facebook.FacebookAuthRepository
+import com.practice.socialclient.model.repositories.auth.twitter.TwitterAuthRepository
+import com.practice.socialclient.model.repositories.network.facebook.FacebookApiClient
+import com.practice.socialclient.model.repositories.network.facebook.client.FacebookLoginManagerImpl
+import com.practice.socialclient.model.repositories.network.facebook.FacebookNetworkClient
+import com.practice.socialclient.model.repositories.network.facebook.client.FacebookLoginManager
+import com.practice.socialclient.model.repositories.network.twitter.TwitterApiClient
+import com.practice.socialclient.model.repositories.network.twitter.TwitterNetworkClient
+import com.practice.socialclient.model.repositories.network.twitter.client.TwitterClient
+import com.practice.socialclient.model.repositories.network.twitter.client.TwitterClientImpl
 import com.practice.socialclient.model.prefs.Prefs
 import com.practice.socialclient.model.prefs.PrefsImpl
-import com.practice.socialclient.model.network_api.twitter.client.TwitterConstants
+import com.practice.socialclient.model.repositories.network.twitter.client.TwitterConstants
 import com.practice.socialclient.model.repositories.friends.FriendsRepository
 import com.practice.socialclient.model.repositories.friends.facebook.FacebookFriendsRepository
 import com.practice.socialclient.model.repositories.friends.twitter.TwitterFriendsRepository
@@ -97,6 +95,11 @@ class AppModuleImpl: AppModule {
     }
 
     @Provides
+    override fun provideFacebookLoginManager(): FacebookLoginManager {
+        return FacebookLoginManagerImpl(App.appModule!!.provideILog(), App.appModule!!.providePreferences())
+    }
+
+    @Provides
     override fun provideFacebookFriendsRepository(): FriendsRepository {
         return FacebookFriendsRepository(App.appModule!!.provideFacebookNetworkClient(),
             App.appModule!!.provideILog())
@@ -145,23 +148,21 @@ class AppModuleImpl: AppModule {
     }
 
     @Provides
-    override fun provideFacebookStateLoginUtil(): LoginStateUtil {
-        return FacebookLoginStateUtil(App.appModule!!.providePreferences())
+    override fun provideFacebookAuthRepository(): AuthRepository {
+        return FacebookAuthRepository(App.appModule!!.provideILog(),
+            App.appModule!!.provideTwitterClient(), App.appModule!!.providePreferences(),
+            App.appModule!!.provideFacebookLoginManager())
     }
 
     @Provides
-    override fun provideTwitterStateLoginUtil(): LoginStateUtil {
-        return TwitterLoginStateUtil(App.appModule!!.providePreferences())
+    override fun provideTwitterAuthRepository(): AuthRepository {
+        return TwitterAuthRepository(App.appModule!!.provideILog(),
+            App.appModule!!.provideTwitterClient(), App.appModule!!.providePreferences(),
+            App.appModule!!.provideFacebookLoginManager())
     }
 
-    @Provides
-    override fun provideFacebookLoginManager(): FacebookLoginManager {
-        return FacebookLoginManagerImpl(App.appModule!!.provideILog(), App.appModule!!.providePreferences())
-    }
 
-    override fun provideLogOutUtil(): LogOutUtil {
-        return LogOutUtilImpl(App.appModule!!.provideILog(), App.appModule!!.provideTwitterClient(),
-            App.appModule!!.providePreferences(), App.appModule!!.provideFacebookLoginManager())
-    }
+
+
 
 }

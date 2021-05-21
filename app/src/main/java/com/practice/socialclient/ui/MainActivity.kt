@@ -20,7 +20,7 @@ import com.practice.socialclient.R
 import com.practice.socialclient.databinding.NavHeaderBinding
 import com.practice.socialclient.model.logger.Log
 import com.practice.socialclient.model.logger.Logger
-import com.practice.socialclient.model.schemas.UserInfo
+import com.practice.socialclient.model.dto.UserInfo
 import com.practice.socialclient.ui.arch.FragmentContract
 import com.practice.socialclient.ui.friends.item_fragment.ItemFriendsContract
 import com.practice.socialclient.ui.login.LoginContract

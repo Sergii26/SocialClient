@@ -6,7 +6,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.practice.socialclient.R
 import com.practice.socialclient.databinding.ItemPhotoBinding
-import com.practice.socialclient.model.schemas.PhotoInfo
+import com.practice.socialclient.model.dto.PhotoInfo
 import com.practice.socialclient.ui.adapter_list.BaseListAdapter
 
 class ItemPhotosListAdapter : BaseListAdapter<PhotoInfo>() {

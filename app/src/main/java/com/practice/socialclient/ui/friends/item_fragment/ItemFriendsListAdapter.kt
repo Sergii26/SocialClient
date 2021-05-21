@@ -6,7 +6,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.practice.socialclient.R
 import com.practice.socialclient.databinding.ItemFriendBinding
-import com.practice.socialclient.model.schemas.FriendInfo
+import com.practice.socialclient.model.dto.FriendInfo
 import com.practice.socialclient.ui.adapter_list.BaseListAdapter
 
 class ItemFriendsListAdapter : BaseListAdapter<FriendInfo>() {

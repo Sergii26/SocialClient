@@ -2,9 +2,9 @@ package com.practice.socialclient.ui.friends.item_fragment
 
 import androidx.lifecycle.LiveData
 import com.google.android.material.navigation.NavigationView
-import com.practice.socialclient.model.schemas.FriendInfo
-import com.practice.socialclient.model.schemas.FriendsCountInfo
-import com.practice.socialclient.model.schemas.UserInfo
+import com.practice.socialclient.model.dto.FriendInfo
+import com.practice.socialclient.model.dto.FriendsCountInfo
+import com.practice.socialclient.model.dto.UserInfo
 import com.practice.socialclient.ui.arch.FragmentContract
 
 interface ItemFriendsContract {

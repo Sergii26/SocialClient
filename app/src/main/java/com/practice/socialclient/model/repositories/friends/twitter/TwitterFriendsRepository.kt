@@ -1,10 +1,10 @@
 package com.practice.socialclient.model.repositories.friends.twitter
 
 import com.practice.socialclient.model.logger.Log
-import com.practice.socialclient.model.network_api.twitter.TwitterNetworkClient
+import com.practice.socialclient.model.repositories.network.twitter.TwitterNetworkClient
 import com.practice.socialclient.model.repositories.friends.FriendsRepository
-import com.practice.socialclient.model.schemas.FriendInfo
-import com.practice.socialclient.model.schemas.FriendsCountInfo
+import com.practice.socialclient.model.dto.FriendInfo
+import com.practice.socialclient.model.dto.FriendsCountInfo
 import io.reactivex.Single
 
 class TwitterFriendsRepository(

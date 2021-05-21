@@ -5,7 +5,7 @@
     <data>
         <variable
             name="friend"
-            type="com.practice.socialclient.model.schemas.FriendInfo" />
+            type="com.practice.socialclient.model.dto.FriendInfo" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

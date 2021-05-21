@@ -1,9 +1,9 @@
 package com.practice.socialclient.model.repositories.photos.twitter
 
 import com.practice.socialclient.model.logger.Log
-import com.practice.socialclient.model.network_api.twitter.TwitterNetworkClient
+import com.practice.socialclient.model.repositories.network.twitter.TwitterNetworkClient
 import com.practice.socialclient.model.repositories.photos.PhotosRepository
-import com.practice.socialclient.model.schemas.PhotoInfo
+import com.practice.socialclient.model.dto.PhotoInfo
 import io.reactivex.Single
 
 class TwitterPhotosRepository(

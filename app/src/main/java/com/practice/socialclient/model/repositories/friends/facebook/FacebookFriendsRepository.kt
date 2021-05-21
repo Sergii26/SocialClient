@@ -2,10 +2,10 @@ package com.practice.socialclient.model.repositories.friends.facebook
 
 import com.facebook.AccessToken
 import com.practice.socialclient.model.logger.Log
-import com.practice.socialclient.model.network_api.facebook.FacebookNetworkClient
+import com.practice.socialclient.model.repositories.network.facebook.FacebookNetworkClient
 import com.practice.socialclient.model.repositories.friends.FriendsRepository
-import com.practice.socialclient.model.schemas.FriendInfo
-import com.practice.socialclient.model.schemas.FriendsCountInfo
+import com.practice.socialclient.model.dto.FriendInfo
+import com.practice.socialclient.model.dto.FriendsCountInfo
 import io.reactivex.Single
 
 class FacebookFriendsRepository(

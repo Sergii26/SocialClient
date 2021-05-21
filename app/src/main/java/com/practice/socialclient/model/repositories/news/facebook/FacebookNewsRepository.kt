@@ -2,11 +2,11 @@ package com.practice.socialclient.model.repositories.news.facebook
 
 import com.facebook.AccessToken
 import com.practice.socialclient.model.logger.Log
-import com.practice.socialclient.model.network_api.facebook.FacebookNetworkClient
-import com.practice.socialclient.model.network_api.facebook.schemas.NewsResponse
-import com.practice.socialclient.model.network_api.facebook.schemas.UserDataResponse
+import com.practice.socialclient.model.repositories.network.facebook.FacebookNetworkClient
+import com.practice.socialclient.model.repositories.network.facebook.schemas.NewsResponse
+import com.practice.socialclient.model.repositories.network.facebook.schemas.UserDataResponse
 import com.practice.socialclient.model.repositories.news.NewsRepository
-import com.practice.socialclient.model.schemas.NewsInfo
+import com.practice.socialclient.model.dto.NewsInfo
 import io.reactivex.Single
 import java.text.SimpleDateFormat
 import java.util.*

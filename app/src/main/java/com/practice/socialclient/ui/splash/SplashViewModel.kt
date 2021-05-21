@@ -2,8 +2,8 @@ package com.practice.socialclient.ui.splash
 
 import androidx.lifecycle.*
 import com.practice.socialclient.model.logger.Log
-import com.practice.socialclient.model.network_api.twitter.TwitterNetworkClient
-import com.practice.socialclient.model.network_api.twitter.client.TwitterClient
+import com.practice.socialclient.model.repositories.network.twitter.TwitterNetworkClient
+import com.practice.socialclient.model.repositories.network.twitter.client.TwitterClient
 import com.practice.socialclient.model.prefs.Prefs
 import com.practice.socialclient.ui.arch.MvvmViewModel
 import io.reactivex.Observable

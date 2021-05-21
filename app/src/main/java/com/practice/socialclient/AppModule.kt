@@ -1,12 +1,11 @@
 package com.practice.socialclient
 
 import com.practice.socialclient.model.logger.Log
-import com.practice.socialclient.model.utils_login.LogOutUtil
-import com.practice.socialclient.model.utils_login.LoginStateUtil
-import com.practice.socialclient.model.network_api.facebook.FacebookNetworkClient
-import com.practice.socialclient.model.network_api.facebook.client.FacebookLoginManager
-import com.practice.socialclient.model.network_api.twitter.TwitterNetworkClient
-import com.practice.socialclient.model.network_api.twitter.client.TwitterClient
+import com.practice.socialclient.model.repositories.auth.AuthRepository
+import com.practice.socialclient.model.repositories.network.facebook.FacebookNetworkClient
+import com.practice.socialclient.model.repositories.network.facebook.client.FacebookLoginManager
+import com.practice.socialclient.model.repositories.network.twitter.TwitterNetworkClient
+import com.practice.socialclient.model.repositories.network.twitter.client.TwitterClient
 import com.practice.socialclient.model.prefs.Prefs
 import com.practice.socialclient.model.repositories.friends.FriendsRepository
 import com.practice.socialclient.model.repositories.news.NewsRepository
@@ -28,6 +27,8 @@ interface AppModule {
 
     fun provideUtils(): Utils
 
+    fun provideFacebookLoginManager(): FacebookLoginManager
+
     fun provideFacebookFriendsRepository(): FriendsRepository
 
     fun provideTwitterFriendsRepository(): FriendsRepository
@@ -44,12 +45,8 @@ interface AppModule {
 
     fun provideTwitterUserInfoRepository(): UserInfoRepository
 
-    fun provideFacebookStateLoginUtil(): LoginStateUtil
+    fun provideFacebookAuthRepository(): AuthRepository
 
-    fun provideTwitterStateLoginUtil(): LoginStateUtil
-
-    fun provideFacebookLoginManager(): FacebookLoginManager
-
-    fun provideLogOutUtil(): LogOutUtil
+    fun provideTwitterAuthRepository(): AuthRepository
 
 }

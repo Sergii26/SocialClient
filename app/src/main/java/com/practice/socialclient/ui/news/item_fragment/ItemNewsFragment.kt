@@ -13,7 +13,7 @@ import com.google.android.material.navigation.NavigationView
 import com.practice.socialclient.R
 import com.practice.socialclient.model.logger.Log
 import com.practice.socialclient.model.logger.Logger
-import com.practice.socialclient.model.schemas.NewsInfo
+import com.practice.socialclient.model.dto.NewsInfo
 import com.practice.socialclient.ui.arch.FragmentIndication
 import com.practice.socialclient.ui.arch.MvvmFragment
 import com.practice.socialclient.ui.listener.EndlessScrollListener

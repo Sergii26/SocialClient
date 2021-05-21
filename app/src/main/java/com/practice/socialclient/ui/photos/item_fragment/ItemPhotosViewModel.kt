@@ -5,13 +5,12 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.practice.socialclient.model.logger.Log
-import com.practice.socialclient.model.utils_login.LogOutUtil
-import com.practice.socialclient.model.utils_login.LoginStateUtil
-import com.practice.socialclient.model.schemas.UserInfo
+import com.practice.socialclient.model.repositories.auth.AuthRepository
+import com.practice.socialclient.model.dto.UserInfo
 import com.practice.socialclient.model.prefs.Prefs
 import com.practice.socialclient.model.repositories.photos.PhotosRepository
 import com.practice.socialclient.model.repositories.user.UserInfoRepository
-import com.practice.socialclient.model.schemas.PhotoInfo
+import com.practice.socialclient.model.dto.PhotoInfo
 import com.practice.socialclient.model.utils_android.Utils
 import com.practice.socialclient.ui.arch.MvvmViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -19,13 +18,12 @@ import io.reactivex.schedulers.Schedulers
 
 class ItemPhotosViewModel(
     private val logger: Log,
-    private val loginStateUtil: LoginStateUtil,
+    private val authRepository: AuthRepository,
     private val androidUtils: Utils,
     private val repository: PhotosRepository,
     private val twUserRepository: UserInfoRepository,
     private val fbUserRepository: UserInfoRepository,
     private val prefs: Prefs,
-    private val logOutUtil: LogOutUtil
 ) : MvvmViewModel(), ItemPhotosContract.ViewModel {
     private val photosLimit = "20"
     private val photosList: MutableLiveData<MutableList<PhotoInfo>> = MutableLiveData()
@@ -107,7 +105,7 @@ class ItemPhotosViewModel(
     }
 
     override fun logOut() {
-        logOutUtil.logOut()
+        authRepository.logOut()
     }
 
     override fun onAny(owner: LifecycleOwner?, event: Lifecycle.Event) {
@@ -124,7 +122,7 @@ class ItemPhotosViewModel(
             internetState.value = false
             return
         }
-        if (loginStateUtil.isLoggedIn()) fetchPhotos()
+        if (authRepository.isLoggedIn()) fetchPhotos()
 
     }
 
@@ -148,7 +146,7 @@ class ItemPhotosViewModel(
             internetState.value = false
             return
         }
-        if (loginStateUtil.isLoggedIn()) fetchNextPhotosPage()
+        if (authRepository.isLoggedIn()) fetchNextPhotosPage()
     }
 
     private fun fetchNextPhotosPage() {

@@ -2,8 +2,8 @@ package com.practice.socialclient.ui.news.item_fragment
 
 import androidx.lifecycle.LiveData
 import com.google.android.material.navigation.NavigationView
-import com.practice.socialclient.model.schemas.NewsInfo
-import com.practice.socialclient.model.schemas.UserInfo
+import com.practice.socialclient.model.dto.NewsInfo
+import com.practice.socialclient.model.dto.UserInfo
 import com.practice.socialclient.ui.arch.FragmentContract
 
 interface ItemNewsContract {

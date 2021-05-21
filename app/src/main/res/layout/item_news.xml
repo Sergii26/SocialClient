@@ -6,7 +6,7 @@
     <data>
         <variable
             name="newsInfo"
-            type="com.practice.socialclient.model.schemas.NewsInfo" />
+            type="com.practice.socialclient.model.dto.NewsInfo" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

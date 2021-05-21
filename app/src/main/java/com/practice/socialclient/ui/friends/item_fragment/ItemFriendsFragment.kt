@@ -15,8 +15,8 @@ import com.practice.socialclient.R
 import com.practice.socialclient.databinding.FragmentFriendsBinding
 import com.practice.socialclient.model.logger.Log
 import com.practice.socialclient.model.logger.Logger
-import com.practice.socialclient.model.schemas.FriendInfo
-import com.practice.socialclient.model.schemas.FriendsCountInfo
+import com.practice.socialclient.model.dto.FriendInfo
+import com.practice.socialclient.model.dto.FriendsCountInfo
 import com.practice.socialclient.ui.arch.FragmentIndication
 import com.practice.socialclient.ui.arch.MvvmFragment
 import com.practice.socialclient.ui.listener.EndlessScrollListener

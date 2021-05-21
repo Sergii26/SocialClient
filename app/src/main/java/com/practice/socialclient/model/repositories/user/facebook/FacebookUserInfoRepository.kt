@@ -2,8 +2,8 @@ package com.practice.socialclient.model.repositories.user.facebook
 
 import com.facebook.AccessToken
 import com.practice.socialclient.model.logger.Log
-import com.practice.socialclient.model.network_api.facebook.FacebookNetworkClient
-import com.practice.socialclient.model.schemas.UserInfo
+import com.practice.socialclient.model.repositories.network.facebook.FacebookNetworkClient
+import com.practice.socialclient.model.dto.UserInfo
 import com.practice.socialclient.model.repositories.user.UserInfoRepository
 import io.reactivex.Single
 

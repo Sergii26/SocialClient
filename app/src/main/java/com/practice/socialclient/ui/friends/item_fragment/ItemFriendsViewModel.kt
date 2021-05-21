@@ -5,11 +5,10 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.practice.socialclient.model.logger.Log
-import com.practice.socialclient.model.utils_login.LogOutUtil
-import com.practice.socialclient.model.utils_login.LoginStateUtil
-import com.practice.socialclient.model.schemas.FriendInfo
-import com.practice.socialclient.model.schemas.FriendsCountInfo
-import com.practice.socialclient.model.schemas.UserInfo
+import com.practice.socialclient.model.repositories.auth.AuthRepository
+import com.practice.socialclient.model.dto.FriendInfo
+import com.practice.socialclient.model.dto.FriendsCountInfo
+import com.practice.socialclient.model.dto.UserInfo
 import com.practice.socialclient.model.prefs.Prefs
 import com.practice.socialclient.model.repositories.friends.FriendsRepository
 import com.practice.socialclient.model.repositories.user.UserInfoRepository
@@ -20,13 +19,12 @@ import io.reactivex.schedulers.Schedulers
 
 class ItemFriendsViewModel constructor(
     private val logger: Log,
-    private val loginStateUtil: LoginStateUtil,
+    private val authRepository: AuthRepository,
     private val androidUtils: Utils,
     private val repository: FriendsRepository,
     private val twUserRepository: UserInfoRepository,
     private val fbUserRepository: UserInfoRepository,
     private val prefs: Prefs,
-    private val logOutUtil: LogOutUtil
 ) : MvvmViewModel(), ItemFriendsContract.ViewModel {
 
     private val friendsCount = MutableLiveData<FriendsCountInfo>()
@@ -90,7 +88,7 @@ class ItemFriendsViewModel constructor(
     }
 
     override fun logOut() {
-        logOutUtil.logOut()
+        authRepository.logOut()
     }
 
     override fun getFriendsListObservable(): MutableLiveData<MutableList<FriendInfo>> {
@@ -145,7 +143,7 @@ class ItemFriendsViewModel constructor(
             return
         }
         internetState.value = true
-        if (loginStateUtil.isLoggedIn()) fetchFriendsCount()
+        if (authRepository.isLoggedIn()) fetchFriendsCount()
     }
 
     private fun fetchFriendsCount() {
@@ -168,7 +166,7 @@ class ItemFriendsViewModel constructor(
             return
         }
         internetState.value = true
-        if (loginStateUtil.isLoggedIn()) fetchFriends()
+        if (authRepository.isLoggedIn()) fetchFriends()
     }
 
     private fun fetchFriends() {
@@ -192,7 +190,7 @@ class ItemFriendsViewModel constructor(
             return
         }
         internetState.value = true
-        if(loginStateUtil.isLoggedIn())fetchNextFriendsPage()
+        if(authRepository.isLoggedIn())fetchNextFriendsPage()
     }
 
     private fun fetchNextFriendsPage() {

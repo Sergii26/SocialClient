@@ -14,12 +14,12 @@ class ItemFriendsViewModelModule(private val fragmentType: String) {
         val appModule = App.appModule
         return when(fragmentType){
             FragmentIndication.FACEBOOK_INDICATION ->  ItemFriendsViewModelFactory(ItemFriendsViewModel(appModule!!.provideILog(),
-                appModule.provideFacebookStateLoginUtil(), appModule.provideUtils(), appModule.provideFacebookFriendsRepository(),
-            appModule.provideTwitterUserInfoRepository(), appModule.provideFacebookUserInfoRepository(), appModule.providePreferences(), appModule.provideLogOutUtil()))
+                appModule.provideFacebookAuthRepository(), appModule.provideUtils(), appModule.provideFacebookFriendsRepository(),
+            appModule.provideTwitterUserInfoRepository(), appModule.provideFacebookUserInfoRepository(), appModule.providePreferences()))
 
             FragmentIndication.TWITTER_INDICATION -> ItemFriendsViewModelFactory(ItemFriendsViewModel(appModule!!.provideILog(),
-                appModule.provideTwitterStateLoginUtil(), appModule.provideUtils(), appModule.provideTwitterFriendsRepository(),
-                appModule.provideTwitterUserInfoRepository(), appModule.provideFacebookUserInfoRepository(), appModule.providePreferences(), appModule.provideLogOutUtil()))
+                appModule.provideTwitterAuthRepository(), appModule.provideUtils(), appModule.provideTwitterFriendsRepository(),
+                appModule.provideTwitterUserInfoRepository(), appModule.provideFacebookUserInfoRepository(), appModule.providePreferences()))
 
             else -> throw Exception("wrong fragment indication")
         }

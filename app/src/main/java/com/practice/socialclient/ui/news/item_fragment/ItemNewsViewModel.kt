@@ -5,10 +5,9 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.practice.socialclient.model.logger.Log
-import com.practice.socialclient.model.utils_login.LogOutUtil
-import com.practice.socialclient.model.utils_login.LoginStateUtil
-import com.practice.socialclient.model.schemas.NewsInfo
-import com.practice.socialclient.model.schemas.UserInfo
+import com.practice.socialclient.model.repositories.auth.AuthRepository
+import com.practice.socialclient.model.dto.NewsInfo
+import com.practice.socialclient.model.dto.UserInfo
 import com.practice.socialclient.model.prefs.Prefs
 import com.practice.socialclient.model.repositories.news.NewsRepository
 import com.practice.socialclient.model.repositories.user.UserInfoRepository
@@ -22,8 +21,7 @@ class ItemNewsViewModel (
     private val twUserRepository: UserInfoRepository,
     private val fbUserRepository: UserInfoRepository,
     private val newsRepository: NewsRepository,
-    private val loginStateUtil: LoginStateUtil,
-    private val logOutUtil: LogOutUtil,
+    private val authRepository: AuthRepository,
     private val androidUtils: Utils,
     private val prefs: Prefs
 ) : MvvmViewModel(), ItemNewsContract.ViewModel {
@@ -64,7 +62,7 @@ class ItemNewsViewModel (
     }
 
     override fun logOut() {
-        logOutUtil.logOut()
+        authRepository.logOut()
     }
 
     override fun onAny(owner: LifecycleOwner?, event: Lifecycle.Event) {
@@ -95,7 +93,7 @@ class ItemNewsViewModel (
             return
         }
         internetState.value = true
-        if(loginStateUtil.isLoggedIn()) fetchNews()
+        if(authRepository.isLoggedIn()) fetchNews()
     }
 
     private fun fetchNews() {
@@ -117,7 +115,7 @@ class ItemNewsViewModel (
             internetState.value = true
             return
         }
-        if(loginStateUtil.isLoggedIn()) fetchNextNewsPage()
+        if(authRepository.isLoggedIn()) fetchNextNewsPage()
     }
 
     private fun fetchNextNewsPage() {

@@ -4,7 +4,7 @@ import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.practice.socialclient.R
-import com.practice.socialclient.model.schemas.FriendInfo
+import com.practice.socialclient.model.dto.FriendInfo
 
 object BindingAdapter {
     @JvmStatic

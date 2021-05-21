@@ -1,8 +1,8 @@
 package com.practice.socialclient.model.repositories.user.twitter
 
 import com.practice.socialclient.model.logger.Log
-import com.practice.socialclient.model.network_api.twitter.TwitterNetworkClient
-import com.practice.socialclient.model.schemas.UserInfo
+import com.practice.socialclient.model.repositories.network.twitter.TwitterNetworkClient
+import com.practice.socialclient.model.dto.UserInfo
 import com.practice.socialclient.model.repositories.user.UserInfoRepository
 import io.reactivex.Single
 

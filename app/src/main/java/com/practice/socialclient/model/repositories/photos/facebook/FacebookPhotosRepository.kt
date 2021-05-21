@@ -2,9 +2,9 @@ package com.practice.socialclient.model.repositories.photos.facebook
 
 import com.facebook.AccessToken
 import com.practice.socialclient.model.logger.Log
-import com.practice.socialclient.model.network_api.facebook.FacebookNetworkClient
+import com.practice.socialclient.model.repositories.network.facebook.FacebookNetworkClient
 import com.practice.socialclient.model.repositories.photos.PhotosRepository
-import com.practice.socialclient.model.schemas.PhotoInfo
+import com.practice.socialclient.model.dto.PhotoInfo
 import io.reactivex.Single
 
 class FacebookPhotosRepository(

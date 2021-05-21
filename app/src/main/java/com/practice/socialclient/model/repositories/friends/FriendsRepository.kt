@@ -1,7 +1,7 @@
 package com.practice.socialclient.model.repositories.friends
 
-import com.practice.socialclient.model.schemas.FriendInfo
-import com.practice.socialclient.model.schemas.FriendsCountInfo
+import com.practice.socialclient.model.dto.FriendInfo
+import com.practice.socialclient.model.dto.FriendsCountInfo
 import io.reactivex.Single
 
 interface FriendsRepository {

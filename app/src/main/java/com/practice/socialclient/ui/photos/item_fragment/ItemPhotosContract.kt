@@ -3,8 +3,8 @@ package com.practice.socialclient.ui.photos.item_fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.android.material.navigation.NavigationView
-import com.practice.socialclient.model.schemas.PhotoInfo
-import com.practice.socialclient.model.schemas.UserInfo
+import com.practice.socialclient.model.dto.PhotoInfo
+import com.practice.socialclient.model.dto.UserInfo
 
 import com.practice.socialclient.ui.arch.FragmentContract
 

@@ -1,9 +1,9 @@
 package com.practice.socialclient.model.repositories.news.twitter
 
 import com.practice.socialclient.model.logger.Log
-import com.practice.socialclient.model.network_api.twitter.TwitterNetworkClient
+import com.practice.socialclient.model.repositories.network.twitter.TwitterNetworkClient
 import com.practice.socialclient.model.repositories.news.NewsRepository
-import com.practice.socialclient.model.schemas.NewsInfo
+import com.practice.socialclient.model.dto.NewsInfo
 import io.reactivex.Single
 
 class TwitterNewsRepository(

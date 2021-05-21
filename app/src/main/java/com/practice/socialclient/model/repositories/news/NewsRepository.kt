@@ -1,6 +1,6 @@
 package com.practice.socialclient.model.repositories.news
 
-import com.practice.socialclient.model.schemas.NewsInfo
+import com.practice.socialclient.model.dto.NewsInfo
 import io.reactivex.Single
 
 interface NewsRepository {

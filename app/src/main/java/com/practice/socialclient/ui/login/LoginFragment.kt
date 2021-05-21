@@ -18,7 +18,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.facebook.login.widget.LoginButton
 import com.practice.socialclient.R
 import com.practice.socialclient.model.logger.Logger
-import com.practice.socialclient.model.network_api.twitter.client.TwitterConstants
+import com.practice.socialclient.model.repositories.network.twitter.client.TwitterConstants
 import com.practice.socialclient.ui.arch.MvvmFragment
 
 
