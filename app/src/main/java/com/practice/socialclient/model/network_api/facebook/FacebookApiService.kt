@@ -42,9 +42,6 @@ interface FacebookApiService {
         @Query("limit") limit: String?
     ): Single<UserPhotosResponse>
 
-    @GET("v9.0/me/feed?fields=attachments,type,created_time,message")
-    fun getUserNews(@Query("access_token") token: String?): Single<NewsResponse>
-
     @GET("v9.0/me/feed?fields=attachments,type,created_time,message,reactions.summary(true),comments.summary(true)")
     fun getNewestNews(
         @Query("access_token") token: String?,

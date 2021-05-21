@@ -1,25 +1,18 @@
 package com.practice.socialclient.ui.login
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.*
-import com.facebook.CallbackManager
-import com.facebook.FacebookCallback
-import com.facebook.FacebookException
-import com.facebook.login.LoginManager
-import com.facebook.login.LoginResult
 import com.practice.socialclient.model.logger.Log
+import com.practice.socialclient.model.network_api.facebook.client.FacebookLoginManager
 import com.practice.socialclient.model.network_api.twitter.TwitterNetworkClient
 import com.practice.socialclient.model.network_api.twitter.client.TwitterClient
 import com.practice.socialclient.model.prefs.Prefs
 import com.practice.socialclient.ui.arch.MvvmViewModel
-import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-
-
-import twitter4j.Twitter
 import javax.inject.Inject
 
 
@@ -27,7 +20,8 @@ class LoginViewModel @Inject constructor(
     private val logger: Log,
     private val prefs: Prefs,
     private val twitterClient: TwitterClient,
-    private val twitterNetworkClient: TwitterNetworkClient
+    private val twitterNetworkClient: TwitterNetworkClient,
+    private val facebookLoginManager: FacebookLoginManager
 ) : MvvmViewModel(), LoginContract.ViewModel {
 
     companion object {
@@ -38,9 +32,6 @@ class LoginViewModel @Inject constructor(
 
     private val twitterAuthUrl: MutableLiveData<String> = MutableLiveData()
     private val loginStateChecked: MutableLiveData<String> = MutableLiveData()
-    private var twitterAccessToken: twitter4j.auth.AccessToken? = null
-    private lateinit var callbackManager: CallbackManager
-    private var facebookAccessToken: com.facebook.AccessToken? = null
 
     override fun getLoginCheckingState(): MutableLiveData<String> {
         return loginStateChecked
@@ -71,11 +62,11 @@ class LoginViewModel @Inject constructor(
     override fun getRequestToken() {
         logger.log("LoginViewModel getRequestToken()")
         if (prefs.getTwitterAuthSecret().isEmpty()) {
-            compositeDisposable.add(Single.fromCallable { twitterClient.getRequestToken() }
+            compositeDisposable.add(twitterClient.getAuthUrl()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ result ->
-                    twitterAuthUrl.value = result?.authorizationURL
+                    twitterAuthUrl.value = result
                 },
                     { error ->
                         logger.log("twitter authUrl error: " + error.message)
@@ -89,47 +80,27 @@ class LoginViewModel @Inject constructor(
         val uri = Uri.parse(url)
         val oauthVerifier = uri.getQueryParameter("oauth_verifier") ?: ""
 
-        compositeDisposable.add(Single.fromCallable {
-            twitterClient.getAccessToken(
-                oauthVerifier
-            )
-        }
+        compositeDisposable.add(twitterClient.getAccessToken(oauthVerifier)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { result ->
-                prefs.putTwitterAuthToken(result?.token.toString())
-                prefs.putTwitterAuthSecret(result?.tokenSecret.toString())
-
-                twitterAccessToken = result
+            .subscribe ({ result ->
+                prefs.putTwitterAuthToken(result.token)
+                prefs.putTwitterAuthSecret(result.secret)
+                twitterClient.setAccToken(result.token, result?.secret.toString())
                 prefs.putIsTwLoggedIn(true)
-            })
+            }, {error ->
+                logger.log("handleUrl() on error: " + error.message)
+            }))
     }
 
     override fun launchFB() {
         logger.log("LoginViewModel launchFB()")
-        callbackManager = CallbackManager.Factory.create()
-        if (!checkFBState())
-            LoginManager.getInstance().registerCallback(callbackManager,
-                object : FacebookCallback<LoginResult?> {
-                    override fun onSuccess(loginResult: LoginResult?) {
-                        facebookAccessToken = loginResult?.accessToken
-                        logger.log("FB CallbackManager callback onSuccess")
-                        prefs.putIsFbLoggedIn(true)
-                    }
-
-                    override fun onCancel() {
-                        logger.log("FB CallbackManager callback onCancel")
-                    }
-
-                    override fun onError(exception: FacebookException) {
-                        logger.log("FB CallbackManager callback onError")
-                    }
-                })
+        if (!checkFBState()) facebookLoginManager.registerCallBack()
     }
 
-    override fun getCallBackManager(): CallbackManager {
-        logger.log("LoginViewModel getCallBackManager()")
-        return callbackManager
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        facebookLoginManager.onActivityResult(requestCode, resultCode, data)
     }
 
     override fun checkLoginStates() {

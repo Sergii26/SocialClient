@@ -4,8 +4,8 @@
 
     <data>
         <variable
-            name="photoUrl"
-            type="String" />
+            name="photo"
+            type="com.practice.socialclient.model.schemas.PhotoInfo" />
     </data>
 
     <ImageView
@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="2dp"
-        android:src="@{photoUrl}"
+        android:src="@{photo.url}"
         android:adjustViewBounds="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

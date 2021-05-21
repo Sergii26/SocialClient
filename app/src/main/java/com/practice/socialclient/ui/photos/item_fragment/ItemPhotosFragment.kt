@@ -12,6 +12,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.navigation.NavigationView
 import com.practice.socialclient.R
 import com.practice.socialclient.model.logger.Logger
+import com.practice.socialclient.model.schemas.PhotoInfo
 import com.practice.socialclient.ui.arch.FragmentIndication
 import com.practice.socialclient.ui.arch.MvvmFragment
 import com.practice.socialclient.ui.listener.EndlessScrollListener
@@ -53,7 +54,7 @@ class ItemPhotosFragment : MvvmFragment<ItemNewsContract.Host, ItemPhotosContrac
         }
         rvPhotos.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         rvPhotos.adapter = adapter
-        model!!.getPhotosObservable().observe(viewLifecycleOwner, { list: MutableList<String> ->
+        model!!.getPhotosObservable().observe(viewLifecycleOwner, { list: MutableList<PhotoInfo> ->
             logger.log("PhotosFragment fb onPhotosListChanged()")
             if (adapter.getItemList().isEmpty()){
                 adapter.setItemList(list)

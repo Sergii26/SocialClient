@@ -3,7 +3,6 @@ package com.practice.socialclient.ui.adapter_pager
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.practice.socialclient.model.logger.Logger
 import com.practice.socialclient.ui.arch.FragmentIndication
 
 abstract class BasePagerAdapter (fragment: Fragment, private val pagesCount: Int) : FragmentStateAdapter(fragment) {

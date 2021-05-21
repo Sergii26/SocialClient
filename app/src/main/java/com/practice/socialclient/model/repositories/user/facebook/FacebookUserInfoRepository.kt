@@ -15,9 +15,6 @@ class FacebookUserInfoRepository(
     override fun getUserInfo(): Single<UserInfo> {
         logger.log("FacebookUserInfoRepository getUserInfo()")
         return facebookNetworkClient.getUserData(getAccToken())
-            .map { response ->
-                UserInfo(response.name.toString(),response.pictureData?.picture?.url.toString())
-            }
     }
 
     private fun getAccToken(): String {

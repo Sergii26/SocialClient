@@ -4,7 +4,7 @@ import com.practice.socialclient.model.logger.Log
 import com.practice.socialclient.model.utils_login.LogOutUtil
 import com.practice.socialclient.model.utils_login.LoginStateUtil
 import com.practice.socialclient.model.network_api.facebook.FacebookNetworkClient
-import com.practice.socialclient.model.network_api.facebook.LoginManager
+import com.practice.socialclient.model.network_api.facebook.client.FacebookLoginManager
 import com.practice.socialclient.model.network_api.twitter.TwitterNetworkClient
 import com.practice.socialclient.model.network_api.twitter.client.TwitterClient
 import com.practice.socialclient.model.prefs.Prefs
@@ -48,7 +48,7 @@ interface AppModule {
 
     fun provideTwitterStateLoginUtil(): LoginStateUtil
 
-    fun provideFacebookLoginManager(): LoginManager
+    fun provideFacebookLoginManager(): FacebookLoginManager
 
     fun provideLogOutUtil(): LogOutUtil
 

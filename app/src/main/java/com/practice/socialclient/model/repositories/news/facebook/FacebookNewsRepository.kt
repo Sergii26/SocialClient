@@ -5,10 +5,9 @@ import com.practice.socialclient.model.logger.Log
 import com.practice.socialclient.model.network_api.facebook.FacebookNetworkClient
 import com.practice.socialclient.model.network_api.facebook.schemas.NewsResponse
 import com.practice.socialclient.model.network_api.facebook.schemas.UserDataResponse
-import com.practice.socialclient.model.schemas.NewsInfo
 import com.practice.socialclient.model.repositories.news.NewsRepository
+import com.practice.socialclient.model.schemas.NewsInfo
 import io.reactivex.Single
-import io.reactivex.functions.BiFunction
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -16,25 +15,23 @@ import kotlin.collections.ArrayList
 class FacebookNewsRepository(
     private val facebookNetworkClient: FacebookNetworkClient,
     private val logger: Log
-): NewsRepository {
+) : NewsRepository {
 
     private var lastFbNewsId = 0L
 
     override fun getNews(limit: String): Single<List<NewsInfo>> {
-            return facebookNetworkClient.getNews(getFbToken(), limit)
-                .zipWith(facebookNetworkClient.getUserData(getFbToken()),
-                    BiFunction { newsResponse, userData -> convertFbNews(newsResponse, userData)})
-                .map { result ->
-                    val newsList = ArrayList<NewsInfo>()
-                    if (result.size > 20) {
-                        newsList.addAll(result.subList(0, 20))
-                        lastFbNewsId = result[20].createdAtUnix
-                    } else {
-                        lastFbNewsId = 0L
-                        newsList.addAll(result)
-                    }
-                    newsList
+        return facebookNetworkClient.getNews(getFbToken(), limit)
+            .map { result ->
+                val newsList = ArrayList<NewsInfo>()
+                if (result.size > 20) {
+                    newsList.addAll(result.subList(0, 20))
+                    lastFbNewsId = result[20].createdAtUnix
+                } else {
+                    lastFbNewsId = 0L
+                    newsList.addAll(result)
                 }
+                newsList
+            }
     }
 
     override fun getNextNewsPage(limit: String): Single<List<NewsInfo>> {
@@ -42,23 +39,21 @@ class FacebookNewsRepository(
         if (lastFbNewsId == 0L) {
             return Single.just(ArrayList())
         }
-           return facebookNetworkClient.getNewsWithUntilTime(
-                getFbToken(), limit,
-                lastFbNewsId.toString()
-            )
-               .zipWith(facebookNetworkClient.getUserData(getFbToken()),
-                   BiFunction { newsResponse, userData -> convertFbNews(newsResponse, userData)})
-               .map { result ->
-                   val newsList = ArrayList<NewsInfo>()
-                   if (result.size > 20) {
-                       newsList.addAll(result.subList(0, 20))
-                       lastFbNewsId = result[20].createdAtUnix
-                   } else {
-                       lastFbNewsId = 0L
-                       newsList.addAll(result)
-                   }
-                   newsList
-               }
+        return facebookNetworkClient.getNewsWithUntilTime(
+            getFbToken(), limit,
+            lastFbNewsId.toString()
+        )
+            .map { result ->
+                val newsList = ArrayList<NewsInfo>()
+                if (result.size > 20) {
+                    newsList.addAll(result.subList(0, 20))
+                    lastFbNewsId = result[20].createdAtUnix
+                } else {
+                    lastFbNewsId = 0L
+                    newsList.addAll(result)
+                }
+                newsList
+            }
     }
 
     override fun cleanCache() {
@@ -69,7 +64,10 @@ class FacebookNewsRepository(
         return AccessToken.getCurrentAccessToken().token
     }
 
-    private fun convertFbNews(fbNews: NewsResponse, userData: UserDataResponse): MutableList<NewsInfo> {
+    private fun convertFbNews(
+        fbNews: NewsResponse,
+        userData: UserDataResponse
+    ): MutableList<NewsInfo> {
         val convertedNews: MutableList<NewsInfo> = ArrayList()
         val responseList = fbNews.newsData as ArrayList
         responseList.forEach {
@@ -84,7 +82,8 @@ class FacebookNewsRepository(
                     it?.reactions?.summary?.totalCount?.toString() ?: "0",
                     convertFbUTCTimeToUnix(it?.createdTime.toString()),
                     NewsInfo.SOURCE_FACEBOOK,
-                    changeFbDatePattern(it?.createdTime.toString())
+                    changeFbDatePattern(it?.createdTime.toString()),
+                    fbNews.paging?.cursors?.after.toString()
                 )
             )
         }

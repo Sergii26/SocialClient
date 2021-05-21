@@ -14,8 +14,6 @@ class TwitterUserInfoRepository(
     override fun getUserInfo(): Single<UserInfo> {
         logger.log("TwitterUserInfoRepository getUserInfo()")
         return twitterNetworkClient.getUserData()
-            .map { response ->
-                UserInfo(response.name.toString(), response.profileImageUrlHttps.toString())
-            }
+
     }
 }

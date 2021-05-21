@@ -2,11 +2,9 @@ package com.practice.socialclient.ui.friends.item_fragment
 
 import androidx.lifecycle.ViewModelProvider
 import com.practice.socialclient.App
-import com.practice.socialclient.model.logger.Logger
 import com.practice.socialclient.ui.arch.FragmentIndication
 import dagger.Module
 import dagger.Provides
-import java.lang.Exception
 
 @Module
 class ItemFriendsViewModelModule(private val fragmentType: String) {

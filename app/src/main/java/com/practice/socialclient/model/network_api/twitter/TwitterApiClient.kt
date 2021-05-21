@@ -2,22 +2,25 @@ package com.practice.socialclient.model.network_api.twitter
 
 import com.google.gson.GsonBuilder
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import com.practice.socialclient.model.network_api.twitter.client.HttpParam
 import com.practice.socialclient.model.network_api.twitter.client.TwitterClient
 import com.practice.socialclient.model.network_api.twitter.schemas.FriendsResponse
 import com.practice.socialclient.model.network_api.twitter.schemas.TweetsResponse
-import com.practice.socialclient.model.network_api.twitter.schemas.User
-import com.practice.socialclient.model.network_api.twitter.schemas.UserInformation
+import com.practice.socialclient.model.schemas.*
 import io.reactivex.Single
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import twitter4j.HttpParameter
-import twitter4j.RequestMethod
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class TwitterApiClient(private val twitterClient: TwitterClient) : TwitterNetworkClient {
     private val apiService: TwitterApiService
 
     companion object {
         private const val BASE_URL = "https://api.twitter.com/"
+        private const val REQUEST_METHOD_GET = "GET"
+        private const val twitterSource = "Twitter friends: "
     }
 
     init {
@@ -33,99 +36,167 @@ class TwitterApiClient(private val twitterClient: TwitterClient) : TwitterNetwor
             .create(TwitterApiService::class.java)
     }
 
-    override fun getTweets(count: String): Single<Array<TweetsResponse>> {
+    override fun getTweets(count: String): Single<List<NewsInfo>> {
         val parameters =
-            arrayOf(HttpParameter("count", count), HttpParameter("tweet_mode", "extended"))
+            arrayOf(HttpParam("count", count), HttpParam("tweet_mode", "extended"))
         val requestUrl = "https://api.twitter.com/1.1/statuses/home_timeline.json"
-        val authHeader = twitterClient.getAuthHeader(parameters, RequestMethod.GET, requestUrl)
+        val authHeader = twitterClient.getAuthHeader(parameters, REQUEST_METHOD_GET, requestUrl)
         return apiService.getTweets(authHeader, count, "extended")
-    }
-
-    override fun getUserTweets(
-        count: String
-    ): Single<Array<TweetsResponse>> {
-        val parameters =
-            arrayOf(HttpParameter("count", count), HttpParameter("tweet_mode", "extended"))
-        val requestUrl = "https://api.twitter.com/1.1/statuses/user_timeline.json"
-        val authHeader = twitterClient.getAuthHeader(parameters, RequestMethod.GET, requestUrl)
-        return apiService.getUserTweets(authHeader, count, "extended")
-    }
-
-    override fun getUserTweetsOlderThan(
-        lastTweetId: Long,
-        count: String
-    ): Single<Array<TweetsResponse>> {
-
-        val parameters = arrayOf(
-            HttpParameter("count", count), HttpParameter("tweet_mode", "extended"),
-            HttpParameter("max_id", lastTweetId)
-        )
-        val requestUrl = "https://api.twitter.com/1.1/statuses/user_timeline.json"
-        val authHeader = twitterClient.getAuthHeader(parameters, RequestMethod.GET, requestUrl)
-        return apiService.getUserTweetsOlderThan(authHeader, lastTweetId, count, "extended")
+            .map { response -> convertTwNews(response) }
     }
 
     override fun getTweetsOlderThan(
         lastTweetId: Long,
         count: String
-    ): Single<Array<TweetsResponse>> {
+    ): Single<List<NewsInfo>> {
 
         val parameters = arrayOf(
-            HttpParameter("count", count), HttpParameter("tweet_mode", "extended"),
-            HttpParameter("max_id", lastTweetId)
+            HttpParam("count", count), HttpParam("tweet_mode", "extended"),
+            HttpParam("max_id", lastTweetId.toString())
         )
         val requestUrl = "https://api.twitter.com/1.1/statuses/home_timeline.json"
-        val authHeader = twitterClient.getAuthHeader(parameters, RequestMethod.GET, requestUrl)
+        val authHeader = twitterClient.getAuthHeader(parameters, REQUEST_METHOD_GET, requestUrl)
         return apiService.getTweetsOlderThan(authHeader, lastTweetId, count, "extended")
+            .map { response -> convertTwNews(response) }
     }
 
-    override fun getFriends(count: String): Single<FriendsResponse> {
-        val parameters = arrayOf(HttpParameter("count", count))
+    override fun getUserTweets(
+        count: String
+    ): Single<List<PhotoInfo>> {
+        val parameters =
+            arrayOf(HttpParam("count", count), HttpParam("tweet_mode", "extended"))
+        val requestUrl = "https://api.twitter.com/1.1/statuses/user_timeline.json"
+        val authHeader = twitterClient.getAuthHeader(parameters, REQUEST_METHOD_GET, requestUrl)
+        return apiService.getUserTweets(authHeader, count, "extended")
+            .map { response -> convertTwPhotosResponse(response) }
+    }
+
+    override fun getUserTweetsOlderThan(
+        lastTweetId: Long,
+        count: String
+    ): Single<List<PhotoInfo>> {
+
+        val parameters = arrayOf(
+            HttpParam("count", count), HttpParam("tweet_mode", "extended"),
+            HttpParam("max_id", lastTweetId.toString())
+        )
+        val requestUrl = "https://api.twitter.com/1.1/statuses/user_timeline.json"
+        val authHeader = twitterClient.getAuthHeader(parameters, REQUEST_METHOD_GET, requestUrl)
+        return apiService.getUserTweetsOlderThan(authHeader, lastTweetId, count, "extended")
+            .map { response -> convertTwPhotosResponse(response) }
+    }
+
+
+
+    override fun getFriends(count: String): Single<List<FriendInfo>> {
+        val parameters = arrayOf(HttpParam("count", count))
         val requestUrl = "https://api.twitter.com/1.1/friends/list.json"
-        val authHeader = twitterClient.getAuthHeader(parameters, RequestMethod.GET, requestUrl)
+        val authHeader = twitterClient.getAuthHeader(parameters, REQUEST_METHOD_GET, requestUrl)
         return apiService.getFriends(authHeader, count)
+            .map { response -> convertTwFriendsResponse(response) }
     }
 
     override fun getNextFriendsPage(
         count: String,
         cursor: String
-    ): Single<FriendsResponse> {
+    ): Single<List<FriendInfo>> {
         val parameters =
-            arrayOf(HttpParameter("count", count), HttpParameter("cursor", cursor))
+            arrayOf(HttpParam("count", count), HttpParam("cursor", cursor))
         val requestUrl = "https://api.twitter.com/1.1/friends/list.json"
-        val authHeader = twitterClient.getAuthHeader(parameters, RequestMethod.GET, requestUrl)
+        val authHeader = twitterClient.getAuthHeader(parameters, REQUEST_METHOD_GET, requestUrl)
         return apiService.getNextFriendsPage(authHeader, count, cursor)
+            .map { response -> convertTwFriendsResponse(response) }
     }
 
-    override fun getFriendsCount(): Single<UserInformation> {
+    override fun getFriendsCount(): Single<FriendsCountInfo> {
         val requestUrl = "https://api.twitter.com/1.1/account/verify_credentials.json"
-        val authHeader = twitterClient.getAuthHeader(emptyArray(), RequestMethod.GET, requestUrl)
+        val authHeader = twitterClient.getAuthHeader(emptyArray(), REQUEST_METHOD_GET, requestUrl)
         return apiService.getFriendsCount(authHeader)
+            .map { response ->
+                response.friendsCount.toString()
+                FriendsCountInfo(twitterSource, response.friendsCount.toString())
+            }
     }
 
-    override fun getUserData(): Single<User> {
+    override fun getUserData(): Single<UserInfo> {
         val requestUrl = "https://api.twitter.com/1.1/account/verify_credentials.json"
-        val authHeader = twitterClient.getAuthHeader(emptyArray(), RequestMethod.GET, requestUrl)
+        val authHeader = twitterClient.getAuthHeader(emptyArray(), REQUEST_METHOD_GET, requestUrl)
         return apiService.getUserData(authHeader)
+            .map { response ->
+                UserInfo(response.name.toString(), response.profileImageUrlHttps.toString())
+            }
     }
 
     override fun isLoggedIn(): Single<Any> {
         val requestUrl = "https://api.twitter.com/1.1/account/verify_credentials.json"
-        val authHeader = twitterClient.getAuthHeader(emptyArray(), RequestMethod.GET, requestUrl)
+        val authHeader = twitterClient.getAuthHeader(emptyArray(), REQUEST_METHOD_GET, requestUrl)
         return apiService.isLoggedIn(authHeader)
     }
 
-//    private fun getTwAuthHeader(parameters: Array<HttpParameter>, requestMethod: RequestMethod,
-//         requestUrl: String): String {
-//        return twitterClient.authorization.getAuthorizationHeader(
-//            HttpRequest(
-//                requestMethod,
-//                requestUrl,
-//                parameters,
-//                twitterClient.authorization,
-//                null
-//            )
-//        )
-//    }
+    private fun convertTwFriendsResponse(response: FriendsResponse): MutableList<FriendInfo> {
+        val convertedResponse: MutableList<FriendInfo> = ArrayList()
+        response.friends.forEach {
+            convertedResponse.add(
+                FriendInfo(
+                    it.name.toString(),
+                    it.profileImageUrlHttps.toString(),
+                    FriendInfo.SOURCE_TWITTER,
+                    response.nextCursorStr
+                )
+            )
+        }
+        return convertedResponse
+    }
+
+    private fun convertTwPhotosResponse(response: Array<TweetsResponse>): MutableList<PhotoInfo> {
+        val convertedResponse: MutableList<PhotoInfo> = ArrayList()
+        response.forEach {
+            if (it.entities?.mediaArray?.get(0)?.mediaUrl.toString() != "null") {
+                convertedResponse.add(
+                    PhotoInfo(
+                        it.entities?.mediaArray?.get(0)?.mediaUrl.toString(),
+                        it.id.toString()
+                    )
+                )
+            }
+        }
+        return convertedResponse
+    }
+
+    private fun convertTwNews(twNewResponses: Array<TweetsResponse>): MutableList<NewsInfo> {
+        val convertedNews: MutableList<NewsInfo> = ArrayList()
+//        changeTwDatePattern(twNewResponses.get(0).createdAt.toString())
+        twNewResponses.forEach {
+            convertedNews.add(
+                NewsInfo(
+                    it.id.toString(),
+                    it.fullText.toString(),
+                    it.entities?.mediaArray?.get(0)?.mediaUrl.toString(),
+                    it.user?.profileImageUrlHttps.toString(),
+                    it.user?.name.toString(),
+                    it.likeCount.toString(),
+                    it.retweetCount.toString(),
+                    convertTwUTCTimeToUnix(it.createdAt.toString()),
+                    NewsInfo.SOURCE_TWITTER,
+                    changeTwDatePattern(it.createdAt.toString()),
+                    it.id.toString(),
+                )
+            )
+        }
+        return convertedNews
+    }
+
+    private fun changeTwDatePattern(UTCTime: String): String {
+        val unixTime = convertTwUTCTimeToUnix(UTCTime).toLong()
+        val date1 = Date(unixTime * 1000L)
+        val sdf = SimpleDateFormat("MMMM dd, hh:mm aaa")
+        return sdf.format(date1)
+    }
+
+    private fun convertTwUTCTimeToUnix(UTCTime: String): Long {
+        val sdf = SimpleDateFormat("EEE MMM d HH:mm:ss Z yyyy", Locale.ENGLISH)
+        val date = sdf.parse(UTCTime)
+        return date.time / 1000
+    }
 
 }

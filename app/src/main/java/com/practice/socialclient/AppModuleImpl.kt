@@ -8,9 +8,9 @@ import com.practice.socialclient.model.utils_login.LoginStateUtil
 import com.practice.socialclient.model.utils_login.facebook.FacebookLoginStateUtil
 import com.practice.socialclient.model.utils_login.twitter.TwitterLoginStateUtil
 import com.practice.socialclient.model.network_api.facebook.FacebookApiClient
-import com.practice.socialclient.model.network_api.facebook.FacebookLoginManager
+import com.practice.socialclient.model.network_api.facebook.client.FacebookLoginManagerImpl
 import com.practice.socialclient.model.network_api.facebook.FacebookNetworkClient
-import com.practice.socialclient.model.network_api.facebook.LoginManager
+import com.practice.socialclient.model.network_api.facebook.client.FacebookLoginManager
 import com.practice.socialclient.model.network_api.twitter.TwitterApiClient
 import com.practice.socialclient.model.network_api.twitter.TwitterNetworkClient
 import com.practice.socialclient.model.network_api.twitter.client.TwitterClient
@@ -155,8 +155,8 @@ class AppModuleImpl: AppModule {
     }
 
     @Provides
-    override fun provideFacebookLoginManager(): LoginManager {
-        return FacebookLoginManager()
+    override fun provideFacebookLoginManager(): FacebookLoginManager {
+        return FacebookLoginManagerImpl(App.appModule!!.provideILog(), App.appModule!!.providePreferences())
     }
 
     override fun provideLogOutUtil(): LogOutUtil {

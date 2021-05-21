@@ -10,10 +10,11 @@ data class NewsInfo(
     var likeCount: String,
     var createdAtUnix: Long,
     var source: String,
-    var createdAt: String
+    var createdAt: String,
+    var cursor: String
 ) {
 
-    constructor() : this("", "", "", "", "", "", "", 0, "", "")
+    constructor() : this("", "", "", "", "", "", "", 0, "", "", "")
 
     companion object {
         const val SOURCE_FACEBOOK = "facebook"

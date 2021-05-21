@@ -4,6 +4,7 @@ import com.facebook.AccessToken
 import com.practice.socialclient.model.logger.Log
 import com.practice.socialclient.model.network_api.facebook.FacebookNetworkClient
 import com.practice.socialclient.model.repositories.photos.PhotosRepository
+import com.practice.socialclient.model.schemas.PhotoInfo
 import io.reactivex.Single
 
 class FacebookPhotosRepository(
@@ -14,38 +15,32 @@ class FacebookPhotosRepository(
 
     private var fbCursor: String = ""
 
-    override fun getPhotos(limit: String): Single<List<String>> {
+    override fun getPhotos(limit: String): Single<List<PhotoInfo>> {
         logger.log("FacebookPhotosRepository getPhotos()")
         return facebookNetworkClient.getUserPhotos(getFbToken(), limit)
             .map { response ->
-                fbCursor =
-                    if (response.paging?.next.isNullOrEmpty()) "" else response.paging?.cursors?.after.toString()
-                val photos: MutableList<String> = ArrayList()
-                response.data?.forEach { it ->
-                    photos.add(
-                        it.images?.get(0)?.src.toString()
-                    )
+                if (response[0].cursor.isEmpty() || response[0].cursor == "null") {
+                    fbCursor = ""
+                } else {
+                    fbCursor = response[0].cursor
                 }
-                photos
+                response
             }
     }
 
-    override fun getNextPhotosPage(limit: String): Single<List<String>> {
+    override fun getNextPhotosPage(limit: String): Single<List<PhotoInfo>> {
         logger.log("FacebookPhotosRepository getNextPhotosPage()")
         if (fbCursor == "") {
             return Single.just(ArrayList())
         }
         return facebookNetworkClient.getNextUserPhotosPage(getFbToken(), fbCursor, limit)
             .map { response ->
-                fbCursor =
-                    if (response.paging?.next.isNullOrEmpty()) "" else response.paging?.cursors?.after.toString()
-                val photos: MutableList<String> = ArrayList()
-                response.data?.forEach { it ->
-                    photos.add(
-                        it.images?.get(0)?.src.toString()
-                    )
+                if (response[0].cursor.isEmpty() || response[0].cursor == "null") {
+                    fbCursor = ""
+                } else {
+                    fbCursor = response[0].cursor
                 }
-                photos
+                response
             }
     }
 

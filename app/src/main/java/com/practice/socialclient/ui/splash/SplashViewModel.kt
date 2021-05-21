@@ -9,8 +9,6 @@ import com.practice.socialclient.ui.arch.MvvmViewModel
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import twitter4j.Twitter
-import twitter4j.auth.AccessToken
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 

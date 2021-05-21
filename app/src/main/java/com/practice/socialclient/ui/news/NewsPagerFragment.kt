@@ -2,20 +2,13 @@ package com.practice.socialclient.ui.news
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
-import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.practice.socialclient.R
-import com.practice.socialclient.model.logger.Logger
-import com.practice.socialclient.ui.arch.MvvmFragment
-import com.practice.socialclient.ui.login.LoginViewModel
-import com.practice.socialclient.ui.login.LoginViewModelFactory
 
 class NewsPagerFragment : Fragment() {
 

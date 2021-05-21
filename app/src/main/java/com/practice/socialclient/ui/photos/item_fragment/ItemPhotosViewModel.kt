@@ -11,6 +11,7 @@ import com.practice.socialclient.model.schemas.UserInfo
 import com.practice.socialclient.model.prefs.Prefs
 import com.practice.socialclient.model.repositories.photos.PhotosRepository
 import com.practice.socialclient.model.repositories.user.UserInfoRepository
+import com.practice.socialclient.model.schemas.PhotoInfo
 import com.practice.socialclient.model.utils_android.Utils
 import com.practice.socialclient.ui.arch.MvvmViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -27,7 +28,7 @@ class ItemPhotosViewModel(
     private val logOutUtil: LogOutUtil
 ) : MvvmViewModel(), ItemPhotosContract.ViewModel {
     private val photosLimit = "20"
-    private val photosList: MutableLiveData<MutableList<String>> = MutableLiveData()
+    private val photosList: MutableLiveData<MutableList<PhotoInfo>> = MutableLiveData()
     private val turnOffRefreshing: MutableLiveData<Boolean> = MutableLiveData()
     private val internetState: MutableLiveData<Boolean> = MutableLiveData()
     private val fbUserInfoObservable: MutableLiveData<UserInfo> = MutableLiveData()
@@ -39,6 +40,26 @@ class ItemPhotosViewModel(
 
     override fun getFbUserDataObservable(): LiveData<UserInfo> {
         return fbUserInfoObservable
+    }
+
+    override fun getPhotosObservable(): MutableLiveData<MutableList<PhotoInfo>> {
+        return photosList
+    }
+
+    override fun getTernOffRefreshing(): MutableLiveData<Boolean> {
+        return turnOffRefreshing
+    }
+
+    override fun getInternetState(): MutableLiveData<Boolean> {
+        return internetState
+    }
+
+    override fun checkInternetConnection() {
+        internetState.value = androidUtils.isConnectedToNetwork
+    }
+
+    override fun clearPhotosList() {
+        photosList.value?.clear()
     }
 
     override fun getUserInfo() {
@@ -87,26 +108,6 @@ class ItemPhotosViewModel(
 
     override fun logOut() {
         logOutUtil.logOut()
-    }
-
-    override fun getPhotosObservable(): MutableLiveData<MutableList<String>> {
-        return photosList
-    }
-
-    override fun getTernOffRefreshing(): MutableLiveData<Boolean> {
-        return turnOffRefreshing
-    }
-
-    override fun getInternetState(): MutableLiveData<Boolean> {
-        return internetState
-    }
-
-    override fun checkInternetConnection() {
-        internetState.value = androidUtils.isConnectedToNetwork
-    }
-
-    override fun clearPhotosList() {
-        photosList.value?.clear()
     }
 
     override fun onAny(owner: LifecycleOwner?, event: Lifecycle.Event) {

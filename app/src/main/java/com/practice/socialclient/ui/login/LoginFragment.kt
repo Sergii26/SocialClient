@@ -117,7 +117,7 @@ class LoginFragment : MvvmFragment<LoginContract.Host, LoginContract.ViewModel>(
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        model!!.getCallBackManager().onActivityResult(requestCode, resultCode, data)
+        model!!.onActivityResult(requestCode, resultCode, data)
         super.onActivityResult(requestCode, resultCode, data)
     }
 

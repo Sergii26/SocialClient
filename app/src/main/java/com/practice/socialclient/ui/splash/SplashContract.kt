@@ -1,6 +1,5 @@
 package com.practice.socialclient.ui.splash
 
-import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LiveData
 import com.practice.socialclient.ui.arch.FragmentContract
 

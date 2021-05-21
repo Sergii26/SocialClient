@@ -6,9 +6,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.practice.socialclient.R
 import com.practice.socialclient.databinding.ItemPhotoBinding
+import com.practice.socialclient.model.schemas.PhotoInfo
 import com.practice.socialclient.ui.adapter_list.BaseListAdapter
 
-class ItemPhotosListAdapter : BaseListAdapter<String>() {
+class ItemPhotosListAdapter : BaseListAdapter<PhotoInfo>() {
 
     override fun getViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -17,9 +18,9 @@ class ItemPhotosListAdapter : BaseListAdapter<String>() {
         return PhotoViewHolder(binding)
     }
 
-    inner class PhotoViewHolder(var binding: ItemPhotoBinding): RecyclerView.ViewHolder(binding.root), Binder<String>{
-         override fun bind(data: String) {
-             binding.photoUrl = data
+    inner class PhotoViewHolder(var binding: ItemPhotoBinding): RecyclerView.ViewHolder(binding.root), Binder<PhotoInfo>{
+         override fun bind(data: PhotoInfo) {
+             binding.photo = data
              binding.executePendingBindings()
          }
      }

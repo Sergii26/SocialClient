@@ -1,8 +1,8 @@
 package com.practice.socialclient.ui.login
 
+import android.content.Intent
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.facebook.CallbackManager
+
 import com.practice.socialclient.ui.arch.FragmentContract
 
 interface LoginContract {
@@ -18,7 +18,7 @@ interface LoginContract {
         fun twitterAuthUrl(): LiveData<String>
         fun handleUrl(url: String)
         fun launchFB()
-        fun getCallBackManager(): CallbackManager
         fun getFbPermissions(): List<String>
+        fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?)
     }
 }

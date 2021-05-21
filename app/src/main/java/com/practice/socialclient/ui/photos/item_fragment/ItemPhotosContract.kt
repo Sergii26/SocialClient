@@ -1,7 +1,9 @@
 package com.practice.socialclient.ui.photos.item_fragment
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.google.android.material.navigation.NavigationView
+import com.practice.socialclient.model.schemas.PhotoInfo
 import com.practice.socialclient.model.schemas.UserInfo
 
 import com.practice.socialclient.ui.arch.FragmentContract
@@ -11,7 +13,7 @@ interface ItemPhotosContract {
         fun getPhotos()
         fun getNextPhotosPage()
         fun clearPhotosList()
-        fun getPhotosObservable(): LiveData<MutableList<String>>
+        fun getPhotosObservable(): MutableLiveData<MutableList<PhotoInfo>>
         fun onRefresh()
         fun getTernOffRefreshing(): LiveData<Boolean>
         fun getInternetState(): LiveData<Boolean>

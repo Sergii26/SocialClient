@@ -1,19 +1,15 @@
 package com.practice.socialclient.model.network_api.twitter.client
-
-import twitter4j.HttpParameter
-import twitter4j.RequestMethod
-import twitter4j.auth.AccessToken
-import twitter4j.auth.RequestToken
+import io.reactivex.Single
 
 interface TwitterClient {
     fun getAuthHeader(
-        parameters: Array<HttpParameter>,
-        requestMethod: RequestMethod,
+        parameters: Array<HttpParam>,
+        requestMethod: String,
         requestUrl: String
     ): String
 
-    fun getRequestToken(): RequestToken?
-    fun getAccessToken(verifier: String): AccessToken?
+    fun getAuthUrl(): Single<String>
+    fun getAccessToken(verifier: String): Single<AccToken>
     fun setAccToken(token: String, secret: String)
     fun cleanAccToken()
 }
