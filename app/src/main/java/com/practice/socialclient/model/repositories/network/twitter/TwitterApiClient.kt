@@ -2,11 +2,12 @@ package com.practice.socialclient.model.repositories.network.twitter
 
 import com.google.gson.GsonBuilder
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import com.practice.socialclient.model.dto.*
 import com.practice.socialclient.model.repositories.network.twitter.header_factory.HttpParam
 import com.practice.socialclient.model.repositories.network.twitter.header_factory.TwitterHeaderFactory
 import com.practice.socialclient.model.repositories.network.twitter.schemas.FriendsResponse
 import com.practice.socialclient.model.repositories.network.twitter.schemas.TweetsResponse
-import com.practice.socialclient.model.dto.*
+import io.reactivex.Completable
 import io.reactivex.Single
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -75,7 +76,6 @@ class TwitterApiClient(private val twitterHeaderFactory: TwitterHeaderFactory) :
         lastTweetId: Long,
         count: String
     ): Single<List<PhotoInfo>> {
-
         val parameters = arrayOf(
             HttpParam("count", count), HttpParam("tweet_mode", "extended"),
             HttpParam("max_id", lastTweetId.toString())
@@ -85,8 +85,6 @@ class TwitterApiClient(private val twitterHeaderFactory: TwitterHeaderFactory) :
         return apiService.getUserTweetsOlderThan(authHeader, lastTweetId, count, "extended")
             .map { response -> convertTwPhotosResponse(response) }
     }
-
-
 
     override fun getFriends(count: String): Single<List<FriendInfo>> {
         val parameters = arrayOf(HttpParam("count", count))
@@ -127,10 +125,11 @@ class TwitterApiClient(private val twitterHeaderFactory: TwitterHeaderFactory) :
             }
     }
 
-    override fun isLoggedIn(): Single<Any> {
+    override fun isLoggedIn(): Completable {
         val requestUrl = "https://api.twitter.com/1.1/account/verify_credentials.json"
         val authHeader = twitterHeaderFactory.createAuthHeader(emptyArray(), REQUEST_METHOD_GET, requestUrl)
         return apiService.isLoggedIn(authHeader)
+                .ignoreElement()
     }
 
     private fun convertTwFriendsResponse(response: FriendsResponse): MutableList<FriendInfo> {
@@ -165,7 +164,6 @@ class TwitterApiClient(private val twitterHeaderFactory: TwitterHeaderFactory) :
 
     private fun convertTwNews(twNewResponses: Array<TweetsResponse>): MutableList<NewsInfo> {
         val convertedNews: MutableList<NewsInfo> = ArrayList()
-//        changeTwDatePattern(twNewResponses.get(0).createdAt.toString())
         twNewResponses.forEach {
             convertedNews.add(
                 NewsInfo(
@@ -198,5 +196,4 @@ class TwitterApiClient(private val twitterHeaderFactory: TwitterHeaderFactory) :
         val date = sdf.parse(UTCTime)
         return date.time / 1000
     }
-
 }

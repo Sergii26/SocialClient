@@ -1,8 +1,7 @@
 package com.practice.socialclient.ui.login
 
-import android.content.Intent
 import androidx.lifecycle.LiveData
-
+import com.practice.socialclient.model.repositories.auth.facebook.FacebookAuthRepository
 import com.practice.socialclient.ui.arch.FragmentContract
 
 interface LoginContract {
@@ -19,6 +18,6 @@ interface LoginContract {
         fun handleUrl(url: String)
         fun launchFB()
         fun getFbPermissions(): List<String>
-        fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?)
+        fun getFaceBookRepo(): FacebookAuthRepository
     }
 }

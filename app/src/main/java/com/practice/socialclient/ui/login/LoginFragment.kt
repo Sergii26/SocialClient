@@ -30,8 +30,12 @@ class LoginFragment : MvvmFragment<LoginContract.Host, LoginContract.ViewModel>(
     private lateinit var btnFBLogin: LoginButton
     private lateinit var twitterDialog: Dialog
 
+    override fun createModel(): LoginContract.ViewModel {
+        return ViewModelProvider(this, LoginViewModelFactory()).get(LoginViewModel::class.java)
+    }
+
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_login, container, false)
     }
@@ -82,11 +86,17 @@ class LoginFragment : MvvmFragment<LoginContract.Host, LoginContract.ViewModel>(
         twitterDialog.show()
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        model!!.getFaceBookRepo().onActivityResult(requestCode, resultCode, data)
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
+
     @Suppress("OverridingDeprecatedMember")
     inner class TwitterWebViewClient : WebViewClient() {
         @TargetApi(Build.VERSION_CODES.LOLLIPOP)
         override fun shouldOverrideUrlLoading(
-            view: WebView?, request: WebResourceRequest?
+                view: WebView?, request: WebResourceRequest?
         ): Boolean {
             logger.log("PhotosViewModel shouldOverrideUrlLoading()")
             if (request?.url.toString().startsWith(TwitterConstants.CALLBACK_URL)) {
@@ -114,14 +124,5 @@ class LoginFragment : MvvmFragment<LoginContract.Host, LoginContract.ViewModel>(
             return false
         }
 
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        model!!.onActivityResult(requestCode, resultCode, data)
-        super.onActivityResult(requestCode, resultCode, data)
-    }
-
-    override fun createModel(): LoginContract.ViewModel {
-        return ViewModelProvider(this, LoginViewModelFactory()).get(LoginViewModel::class.java)
     }
 }

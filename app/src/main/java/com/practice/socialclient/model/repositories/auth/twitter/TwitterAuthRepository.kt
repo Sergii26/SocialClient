@@ -1,10 +1,10 @@
 package com.practice.socialclient.model.repositories.auth.twitter
 
-import io.reactivex.Single
+import com.practice.socialclient.model.repositories.auth.AuthRepository
+import io.reactivex.Completable
+import io.reactivex.Maybe
 
-interface TwitterAuthRepository {
-    fun getTwitterAuthUrl(): Single<String>
-    fun getTwitterAccessToken(verifier: String): Single<AccToken>
-    fun setTwitterAccToken(token: String, secret: String)
-    fun cleanTwitterAccToken()
+interface TwitterAuthRepository : AuthRepository {
+    fun getTwitterAuthUrl(): Maybe<String>
+    fun getTwitterAccessToken(url: String): Completable
 }

@@ -1,13 +1,12 @@
 package com.practice.socialclient.ui.login
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.lifecycle.*
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.practice.socialclient.model.logger.Log
-import com.practice.socialclient.model.repositories.network.twitter.TwitterNetworkClient
-import com.practice.socialclient.model.prefs.Prefs
 import com.practice.socialclient.model.repositories.auth.facebook.FacebookAuthRepository
 import com.practice.socialclient.model.repositories.auth.twitter.TwitterAuthRepository
 import com.practice.socialclient.ui.arch.MvvmViewModel
@@ -15,11 +14,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-
 class LoginViewModel @Inject constructor(
     private val logger: Log,
-    private val prefs: Prefs,
-    private val twitterNetworkClient: TwitterNetworkClient,
     private val facebookAuthRepo: FacebookAuthRepository,
     private val twitterAuthRepo: TwitterAuthRepository
 ) : MvvmViewModel(), LoginContract.ViewModel {
@@ -37,18 +33,12 @@ class LoginViewModel @Inject constructor(
         return loginStateChecked
     }
 
-
     override fun twitterAuthUrl(): LiveData<String> {
         return twitterAuthUrl
     }
 
     override fun getFbPermissions(): List<String> {
-        return listOf(
-            "user_status",
-            "pages_read_user_content",
-            "user_birthday",
-            "user_friends",
-        )
+        return facebookAuthRepo.getPermissions()
     }
 
     override fun onAny(owner: LifecycleOwner?, event: Lifecycle.Event) {
@@ -61,85 +51,66 @@ class LoginViewModel @Inject constructor(
     @RequiresApi(Build.VERSION_CODES.O)
     override fun getRequestToken() {
         logger.log("LoginViewModel getRequestToken()")
-        if (prefs.getTwitterAuthSecret().isEmpty()) {
-            compositeDisposable.add(twitterAuthRepo.getTwitterAuthUrl()
+        compositeDisposable.add(twitterAuthRepo.getTwitterAuthUrl()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ result ->
                     twitterAuthUrl.value = result
                 },
-                    { error ->
-                        logger.log("twitter authUrl error: " + error.message)
-                    })
-            )
-        }
+                        { error ->
+                            logger.log("twitter authUrl error: " + error.message)
+                        })
+        )
     }
 
     override fun handleUrl(url: String) {
         logger.log("LoginViewModel handleUrl()")
-        val uri = Uri.parse(url)
-        val oauthVerifier = uri.getQueryParameter("oauth_verifier") ?: ""
-
-        compositeDisposable.add(twitterAuthRepo.getTwitterAccessToken(oauthVerifier)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe ({ result ->
-                prefs.putTwitterAuthToken(result.token)
-                prefs.putTwitterAuthSecret(result.secret)
-                twitterAuthRepo.setTwitterAccToken(result.token, result?.secret.toString())
-                prefs.putIsTwLoggedIn(true)
-            }, {error ->
-                logger.log("handleUrl() on error: " + error.message)
-            }))
+        compositeDisposable.add(twitterAuthRepo.getTwitterAccessToken(url)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({}, { error ->
+                    logger.log("handleUrl() on error: " + error.message)
+                }))
     }
 
     override fun launchFB() {
         logger.log("LoginViewModel launchFB()")
-        if (!checkFBState()) facebookAuthRepo.registerFacebookCallBack()
+        compositeDisposable.add(facebookAuthRepo.setupLoginState().subscribe())
     }
 
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        facebookAuthRepo.onActivityResult(requestCode, resultCode, data)
+    override fun getFaceBookRepo(): FacebookAuthRepository {
+        return facebookAuthRepo
     }
 
     override fun checkLoginStates() {
         logger.log("LoginViewModel checkLoginStates()")
-        prefs.putIsFbLoggedIn(checkFBState())
+        facebookAuthRepo.checkAuthState()
         loginStateChecked.value = FB_LOGIN_CHECKED
         setTwLoginState()
     }
 
-    private fun checkFBState(): Boolean {
-        logger.log("LoginViewModel checkFBState()")
-        return com.facebook.AccessToken.getCurrentAccessToken() != null
-    }
-
     private fun setTwLoginState() {
         logger.log("LoginViewModel setTwLoginState()")
-        compositeDisposable.add(twitterNetworkClient.isLoggedIn()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ result ->
-                prefs.putIsTwLoggedIn(true)
-                if (loginStateChecked.value.isNullOrEmpty()) {
-                    loginStateChecked.value = TW_LOGIN_CHECKED
-                }
-                if (loginStateChecked.value == FB_LOGIN_CHECKED) {
-                    loginStateChecked.value = LOGIN_CHECKED
-                }
-            },
-                { error ->
-                    prefs.putIsTwLoggedIn(false)
+        compositeDisposable.add(twitterAuthRepo.setupLoginState()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
                     if (loginStateChecked.value.isNullOrEmpty()) {
                         loginStateChecked.value = TW_LOGIN_CHECKED
                     }
                     if (loginStateChecked.value == FB_LOGIN_CHECKED) {
                         loginStateChecked.value = LOGIN_CHECKED
                     }
-                    logger.log("isTwitterLoggedIn() on error: " + error.message)
-                }
-            ))
+                },
+                        { error ->
+                            if (loginStateChecked.value.isNullOrEmpty()) {
+                                loginStateChecked.value = TW_LOGIN_CHECKED
+                            }
+                            if (loginStateChecked.value == FB_LOGIN_CHECKED) {
+                                loginStateChecked.value = LOGIN_CHECKED
+                            }
+                            logger.log("isTwitterLoggedIn() on error: " + error.message)
+                        }
+                ))
     }
-
 }

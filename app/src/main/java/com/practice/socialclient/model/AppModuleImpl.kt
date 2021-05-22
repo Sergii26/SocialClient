@@ -1,16 +1,14 @@
-package com.practice.socialclient
+package com.practice.socialclient.model
 
+import com.practice.socialclient.App
 import com.practice.socialclient.model.logger.Log
 import com.practice.socialclient.model.logger.Logger
 import com.practice.socialclient.model.prefs.Prefs
 import com.practice.socialclient.model.prefs.PrefsImpl
-import com.practice.socialclient.model.repositories.auth.AuthUtilsRepository
 import com.practice.socialclient.model.repositories.auth.facebook.FacebookAuthRepository
 import com.practice.socialclient.model.repositories.auth.facebook.FacebookAuthRepositoryImpl
-import com.practice.socialclient.model.repositories.auth.facebook.FacebookAuthUtilsRepository
 import com.practice.socialclient.model.repositories.auth.twitter.TwitterAuthRepository
 import com.practice.socialclient.model.repositories.auth.twitter.TwitterAuthRepositoryImpl
-import com.practice.socialclient.model.repositories.auth.twitter.TwitterAuthUtilsRepository
 import com.practice.socialclient.model.repositories.auth.twitter.TwitterConstants
 import com.practice.socialclient.model.repositories.friends.FriendsRepository
 import com.practice.socialclient.model.repositories.friends.facebook.FacebookFriendsRepository
@@ -30,8 +28,8 @@ import com.practice.socialclient.model.repositories.photos.twitter.TwitterPhotos
 import com.practice.socialclient.model.repositories.user.UserInfoRepository
 import com.practice.socialclient.model.repositories.user.facebook.FacebookUserInfoRepository
 import com.practice.socialclient.model.repositories.user.twitter.TwitterUserInfoRepository
-import com.practice.socialclient.model.utils_android.AndroidUtils
-import com.practice.socialclient.model.utils_android.Utils
+import com.practice.socialclient.model.utils.AndroidUtils
+import com.practice.socialclient.model.utils.Utils
 import dagger.Module
 import dagger.Provides
 import twitter4j.Twitter
@@ -39,7 +37,6 @@ import twitter4j.TwitterFactory
 import twitter4j.conf.Configuration
 import twitter4j.conf.ConfigurationBuilder
 import javax.inject.Singleton
-
 
 @Module
 class AppModuleImpl: AppModule {
@@ -81,7 +78,7 @@ class AppModuleImpl: AppModule {
 
     @Provides
     @Singleton
-    override fun provideTwitterHeaderFactoryt(): TwitterHeaderFactory {
+    override fun provideTwitterHeaderFactory(): TwitterHeaderFactory {
         return TwitterAuthHeaderFactory(twitterClient)
     }
 
@@ -98,74 +95,52 @@ class AppModuleImpl: AppModule {
 
     @Provides
     override fun provideFacebookFriendsRepository(): FriendsRepository {
-        return FacebookFriendsRepository(App.appModule!!.provideFacebookNetworkClient(),
-            App.appModule!!.provideILog())
+        return FacebookFriendsRepository(provideFacebookNetworkClient(), provideILog())
     }
 
     @Provides
     override fun provideTwitterFriendsRepository(): FriendsRepository {
-        return TwitterFriendsRepository(App.appModule!!.provideTwitterNetworkClient(),
-            App.appModule!!.provideILog())
+        return TwitterFriendsRepository(provideTwitterNetworkClient(), provideILog())
     }
 
     @Provides
     override fun provideFacebookPhotosRepository(): PhotosRepository {
-        return FacebookPhotosRepository(App.appModule!!.provideFacebookNetworkClient(),
-            App.appModule!!.provideILog())
+        return FacebookPhotosRepository(provideFacebookNetworkClient(), provideILog())
     }
 
     @Provides
     override fun provideTwitterPhotosRepository(): PhotosRepository {
-        return TwitterPhotosRepository(App.appModule!!.provideTwitterNetworkClient(),
-            App.appModule!!.provideILog())
+        return TwitterPhotosRepository(provideTwitterNetworkClient(), provideILog())
     }
 
     @Provides
     override fun provideFacebookNewsRepository(): NewsRepository {
-        return FacebookNewsRepository(App.appModule!!.provideFacebookNetworkClient(),
-            App.appModule!!.provideILog())
+        return FacebookNewsRepository(provideFacebookNetworkClient(), provideILog())
     }
 
     @Provides
     override fun provideTwitterNewsRepository(): NewsRepository {
-        return TwitterNewsRepository(App.appModule!!.provideTwitterNetworkClient(),
-            App.appModule!!.provideILog())
+        return TwitterNewsRepository(provideTwitterNetworkClient(), provideILog())
     }
 
     @Provides
     override fun provideFacebookUserInfoRepository(): UserInfoRepository {
-        return FacebookUserInfoRepository(App.appModule!!.provideFacebookNetworkClient(),
-            App.appModule!!.provideILog())
+        return FacebookUserInfoRepository(provideFacebookNetworkClient(), provideILog())
     }
 
     @Provides
     override fun provideTwitterUserInfoRepository(): UserInfoRepository {
-        return TwitterUserInfoRepository(App.appModule!!.provideTwitterNetworkClient(),
-            App.appModule!!.provideILog())
-    }
-
-    @Provides
-    override fun provideFacebookAuthUtilsRepository(): AuthUtilsRepository {
-        return FacebookAuthUtilsRepository(App.appModule!!.provideILog(),
-            App.appModule!!.provideTwitterAuthRepository(), App.appModule!!.providePreferences(),
-            App.appModule!!.provideFacebookAuthRepository())
-    }
-
-    @Provides
-    override fun provideTwitterAuthUtilsRepository(): AuthUtilsRepository {
-        return TwitterAuthUtilsRepository(App.appModule!!.provideILog(),
-            App.appModule!!.provideTwitterAuthRepository(), App.appModule!!.providePreferences(),
-            App.appModule!!.provideFacebookAuthRepository())
+        return TwitterUserInfoRepository(provideTwitterNetworkClient(), provideILog())
     }
 
 
     @Provides
     override fun provideFacebookAuthRepository(): FacebookAuthRepository {
-        return FacebookAuthRepositoryImpl(App.appModule!!.provideILog(), App.appModule!!.providePreferences())
+        return FacebookAuthRepositoryImpl(provideILog(), providePreferences())
     }
 
     @Provides
     override fun provideTwitterAuthRepository(): TwitterAuthRepository {
-        return TwitterAuthRepositoryImpl(twitterClient)
+        return TwitterAuthRepositoryImpl(twitterClient, provideTwitterNetworkClient(), providePreferences())
     }
 }

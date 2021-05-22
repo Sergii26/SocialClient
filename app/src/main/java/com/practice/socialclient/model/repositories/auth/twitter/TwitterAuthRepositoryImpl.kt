@@ -1,55 +1,64 @@
 package com.practice.socialclient.model.repositories.auth.twitter
 
-import com.practice.socialclient.model.repositories.network.twitter.header_factory.HttpParam
+import android.net.Uri
+import com.practice.socialclient.model.prefs.Prefs
+import com.practice.socialclient.model.repositories.network.twitter.TwitterNetworkClient
+import io.reactivex.Completable
+import io.reactivex.Maybe
 import io.reactivex.Single
-import twitter4j.HttpParameter
-import twitter4j.RequestMethod
 import twitter4j.Twitter
 import twitter4j.auth.AccessToken
 
 class TwitterAuthRepositoryImpl(
-    private val twitterClient: Twitter
-) : TwitterAuthRepository{
+        private val twitterClient: Twitter,
+        private val twitterNetworkClient: TwitterNetworkClient,
+        private val prefs: Prefs,
+) : TwitterAuthRepository {
 
-    override fun setTwitterAccToken(token: String, secret: String) {
-        twitterClient.oAuthAccessToken =
-            AccessToken(token, secret)
+    private fun setTwitterAccToken(token: String, secret: String) {
+        twitterClient.oAuthAccessToken = AccessToken(token, secret)
     }
 
-    override fun cleanTwitterAccToken() {
+    override fun setupLoginState(): Completable {
+        if (isLoggedIn()) {
+            setTwitterAccToken(prefs.getTwitterAuthToken(), prefs.getTwitterAuthSecret())
+        }
+        return twitterNetworkClient.isLoggedIn()
+                .doOnComplete { prefs.putIsTwLoggedIn(true) }
+                .doOnError { prefs.putIsTwLoggedIn(false) }
+    }
+
+    override fun isLoggedIn(): Boolean {
+        return prefs.getTwitterAuthSecret().isNotEmpty()
+    }
+
+    override fun logOut() {
+        prefs.putIsTwLoggedIn(false)
+        prefs.putTwitterAuthSecret("")
+        prefs.putTwitterAuthToken("")
         twitterClient.oAuthAccessToken = null
     }
 
-    override fun getTwitterAuthUrl(): Single<String> {
-        return Single.fromCallable { twitterClient.oAuthRequestToken }
-            .map { response ->
-                response.authorizationURL
-            }
-    }
-
-
-    override fun getTwitterAccessToken(verifier: String): Single<AccToken> {
-        return Single.fromCallable { twitterClient.getOAuthAccessToken(verifier) }
-            .map { response ->
-                AccToken(response.token, response.tokenSecret)
-            }
-    }
-
-    private fun defineRequestMethod(method: String): RequestMethod {
-        return when(method){
-            "GET" -> RequestMethod.GET
-            "PUT" -> RequestMethod.PUT
-            "DELETE" -> RequestMethod.DELETE
-            "HEAD" -> RequestMethod.HEAD
-            else -> throw Exception("unsupported request method")
+    override fun getTwitterAuthUrl(): Maybe<String> {
+        if (isLoggedIn()) {
+            return Maybe.empty()
         }
+        return Maybe.fromCallable { twitterClient.oAuthRequestToken }
+                .map { response -> response.authorizationURL }
     }
 
-    private fun convertParams(params: Array<HttpParam>): Array<HttpParameter> {
-        val convertedParameters = ArrayList<HttpParameter>()
-        params.forEach { it->
-            convertedParameters.add(HttpParameter(it.param, it.value))
-        }
-        return convertedParameters.toTypedArray()
+    override fun getTwitterAccessToken(url: String): Completable {
+        val uri = Uri.parse(url)
+        val oauthVerifier = uri.getQueryParameter("oauth_verifier") ?: ""
+        return Single.fromCallable { twitterClient.getOAuthAccessToken(oauthVerifier) }
+                .map { response -> AccToken(response.token, response.tokenSecret) }
+                .doOnSuccess { result ->
+                    run {
+                        prefs.putTwitterAuthToken(result.token)
+                        prefs.putTwitterAuthSecret(result.secret)
+                        setTwitterAccToken(result.token, result?.secret.toString())
+                        prefs.putIsTwLoggedIn(true)
+                    }
+                }.ignoreElement()
     }
 }

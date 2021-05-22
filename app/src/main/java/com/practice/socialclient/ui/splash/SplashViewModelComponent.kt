@@ -1,6 +1,6 @@
 package com.practice.socialclient.ui.splash
 
-import com.practice.socialclient.AppModule
+import com.practice.socialclient.model.AppModule
 import dagger.Component
 
 @Component(dependencies = [AppModule::class])

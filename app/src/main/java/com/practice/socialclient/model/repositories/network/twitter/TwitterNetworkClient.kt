@@ -1,6 +1,7 @@
 package com.practice.socialclient.model.repositories.network.twitter
 
 import com.practice.socialclient.model.dto.*
+import io.reactivex.Completable
 import io.reactivex.Single
 
 interface TwitterNetworkClient {
@@ -12,5 +13,5 @@ interface TwitterNetworkClient {
     fun getNextFriendsPage(count: String, cursor: String): Single<List<FriendInfo>>
     fun getFriendsCount(): Single<FriendsCountInfo>
     fun getUserData(): Single<UserInfo>
-    fun isLoggedIn(): Single<Any>
+    fun isLoggedIn(): Completable
 }

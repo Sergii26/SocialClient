@@ -4,26 +4,26 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.practice.socialclient.model.logger.Log
-import com.practice.socialclient.model.repositories.auth.AuthUtilsRepository
+import com.practice.socialclient.model.dto.PhotoInfo
 import com.practice.socialclient.model.dto.UserInfo
+import com.practice.socialclient.model.logger.Log
 import com.practice.socialclient.model.prefs.Prefs
+import com.practice.socialclient.model.repositories.auth.AuthRepository
 import com.practice.socialclient.model.repositories.photos.PhotosRepository
 import com.practice.socialclient.model.repositories.user.UserInfoRepository
-import com.practice.socialclient.model.dto.PhotoInfo
-import com.practice.socialclient.model.utils_android.Utils
+import com.practice.socialclient.model.utils.Utils
 import com.practice.socialclient.ui.arch.MvvmViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
 class ItemPhotosViewModel(
-    private val logger: Log,
-    private val authUtilsRepository: AuthUtilsRepository,
-    private val androidUtils: Utils,
-    private val repository: PhotosRepository,
-    private val twUserRepository: UserInfoRepository,
-    private val fbUserRepository: UserInfoRepository,
-    private val prefs: Prefs,
+        private val logger: Log,
+        private val authRepository: AuthRepository,
+        private val androidUtils: Utils,
+        private val repository: PhotosRepository,
+        private val twUserRepository: UserInfoRepository,
+        private val fbUserRepository: UserInfoRepository,
+        private val prefs: Prefs,
 ) : MvvmViewModel(), ItemPhotosContract.ViewModel {
     private val photosLimit = "20"
     private val photosList: MutableLiveData<MutableList<PhotoInfo>> = MutableLiveData()
@@ -105,7 +105,7 @@ class ItemPhotosViewModel(
     }
 
     override fun logOut() {
-        authUtilsRepository.logOut()
+        authRepository.logOut()
     }
 
     override fun onAny(owner: LifecycleOwner?, event: Lifecycle.Event) {
@@ -122,7 +122,7 @@ class ItemPhotosViewModel(
             internetState.value = false
             return
         }
-        if (authUtilsRepository.isLoggedIn()) fetchPhotos()
+        if (authRepository.isLoggedIn()) fetchPhotos()
 
     }
 
@@ -146,7 +146,7 @@ class ItemPhotosViewModel(
             internetState.value = false
             return
         }
-        if (authUtilsRepository.isLoggedIn()) fetchNextPhotosPage()
+        if (authRepository.isLoggedIn()) fetchNextPhotosPage()
     }
 
     private fun fetchNextPhotosPage() {

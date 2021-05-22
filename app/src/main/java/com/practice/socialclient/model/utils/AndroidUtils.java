@@ -1,4 +1,4 @@
-package com.practice.socialclient.model.utils_android;
+package com.practice.socialclient.model.utils;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

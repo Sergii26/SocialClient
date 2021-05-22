@@ -2,6 +2,8 @@ package com.practice.socialclient
 
 import android.content.Context
 import androidx.multidex.MultiDexApplication
+import com.practice.socialclient.model.AppModule
+import com.practice.socialclient.model.AppModuleImpl
 
 
 class App : MultiDexApplication() {

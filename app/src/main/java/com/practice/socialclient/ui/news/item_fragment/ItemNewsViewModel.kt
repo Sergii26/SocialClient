@@ -4,26 +4,26 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.practice.socialclient.model.logger.Log
-import com.practice.socialclient.model.repositories.auth.AuthUtilsRepository
 import com.practice.socialclient.model.dto.NewsInfo
 import com.practice.socialclient.model.dto.UserInfo
+import com.practice.socialclient.model.logger.Log
 import com.practice.socialclient.model.prefs.Prefs
+import com.practice.socialclient.model.repositories.auth.AuthRepository
 import com.practice.socialclient.model.repositories.news.NewsRepository
 import com.practice.socialclient.model.repositories.user.UserInfoRepository
-import com.practice.socialclient.model.utils_android.Utils
+import com.practice.socialclient.model.utils.Utils
 import com.practice.socialclient.ui.arch.MvvmViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
-class ItemNewsViewModel (
-    private val logger: Log,
-    private val twUserRepository: UserInfoRepository,
-    private val fbUserRepository: UserInfoRepository,
-    private val newsRepository: NewsRepository,
-    private val authUtilsRepository: AuthUtilsRepository,
-    private val androidUtils: Utils,
-    private val prefs: Prefs
+class ItemNewsViewModel(
+        private val logger: Log,
+        private val twUserRepository: UserInfoRepository,
+        private val fbUserRepository: UserInfoRepository,
+        private val newsRepository: NewsRepository,
+        private val authRepository: AuthRepository,
+        private val androidUtils: Utils,
+        private val prefs: Prefs
 ) : MvvmViewModel(), ItemNewsContract.ViewModel {
 
     private val newsLimit = "25"
@@ -62,7 +62,7 @@ class ItemNewsViewModel (
     }
 
     override fun logOut() {
-        authUtilsRepository.logOut()
+        authRepository.logOut()
     }
 
     override fun onAny(owner: LifecycleOwner?, event: Lifecycle.Event) {
@@ -93,7 +93,7 @@ class ItemNewsViewModel (
             return
         }
         internetState.value = true
-        if(authUtilsRepository.isLoggedIn()) fetchNews()
+        if (authRepository.isLoggedIn()) fetchNews()
     }
 
     private fun fetchNews() {
@@ -115,7 +115,7 @@ class ItemNewsViewModel (
             internetState.value = true
             return
         }
-        if(authUtilsRepository.isLoggedIn()) fetchNextNewsPage()
+        if (authRepository.isLoggedIn()) fetchNextNewsPage()
     }
 
     private fun fetchNextNewsPage() {
