@@ -16,11 +16,11 @@ class ItemNewsViewModelFactoryModule(private val fragmentType: String) {
         return when(fragmentType){
             FragmentIndication.FACEBOOK_INDICATION ->  ItemNewsViewModelFactory(ItemNewsViewModel(appModule!!.provideILog(),
                 appModule.provideTwitterUserInfoRepository(), appModule.provideFacebookUserInfoRepository(),appModule.provideFacebookNewsRepository(),
-                appModule.provideFacebookAuthRepository(),appModule.provideUtils(), appModule.providePreferences()))
+                appModule.provideFacebookAuthUtilsRepository(),appModule.provideUtils(), appModule.providePreferences()))
 
             FragmentIndication.TWITTER_INDICATION -> ItemNewsViewModelFactory(ItemNewsViewModel(appModule!!.provideILog(),
                 appModule.provideTwitterUserInfoRepository(), appModule.provideFacebookUserInfoRepository(), appModule.provideTwitterNewsRepository(),
-                appModule.provideTwitterAuthRepository(), appModule.provideUtils(), appModule.providePreferences()))
+                appModule.provideTwitterAuthUtilsRepository(), appModule.provideUtils(), appModule.providePreferences()))
 
             else -> throw Exception("wrong fragment indication")
         }

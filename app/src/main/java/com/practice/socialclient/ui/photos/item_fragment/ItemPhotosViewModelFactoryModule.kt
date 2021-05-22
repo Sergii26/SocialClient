@@ -15,11 +15,11 @@ class ItemPhotosViewModelFactoryModule(private val fragmentType: String) {
         val appModule = App.appModule
         return when(fragmentType){
             FragmentIndication.FACEBOOK_INDICATION ->  ItemPhotosViewModelFactory(ItemPhotosViewModel(appModule!!.provideILog(),
-                appModule.provideFacebookAuthRepository(), appModule.provideUtils(), appModule.provideFacebookPhotosRepository(),
+                appModule.provideFacebookAuthUtilsRepository(), appModule.provideUtils(), appModule.provideFacebookPhotosRepository(),
                 appModule.provideTwitterUserInfoRepository(), appModule.provideFacebookUserInfoRepository(), appModule.providePreferences()))
 
             FragmentIndication.TWITTER_INDICATION -> ItemPhotosViewModelFactory(ItemPhotosViewModel(appModule!!.provideILog(),
-                appModule.provideTwitterAuthRepository(), appModule.provideUtils(), appModule.provideTwitterPhotosRepository(),
+                appModule.provideTwitterAuthUtilsRepository(), appModule.provideUtils(), appModule.provideTwitterPhotosRepository(),
                 appModule.provideTwitterUserInfoRepository(), appModule.provideFacebookUserInfoRepository(), appModule.providePreferences()))
 
             else -> throw Exception("wrong fragment indication")

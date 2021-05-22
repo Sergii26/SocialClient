@@ -5,7 +5,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.practice.socialclient.model.logger.Log
-import com.practice.socialclient.model.repositories.auth.AuthRepository
+import com.practice.socialclient.model.repositories.auth.AuthUtilsRepository
 import com.practice.socialclient.model.dto.UserInfo
 import com.practice.socialclient.model.prefs.Prefs
 import com.practice.socialclient.model.repositories.photos.PhotosRepository
@@ -18,7 +18,7 @@ import io.reactivex.schedulers.Schedulers
 
 class ItemPhotosViewModel(
     private val logger: Log,
-    private val authRepository: AuthRepository,
+    private val authUtilsRepository: AuthUtilsRepository,
     private val androidUtils: Utils,
     private val repository: PhotosRepository,
     private val twUserRepository: UserInfoRepository,
@@ -105,7 +105,7 @@ class ItemPhotosViewModel(
     }
 
     override fun logOut() {
-        authRepository.logOut()
+        authUtilsRepository.logOut()
     }
 
     override fun onAny(owner: LifecycleOwner?, event: Lifecycle.Event) {
@@ -122,7 +122,7 @@ class ItemPhotosViewModel(
             internetState.value = false
             return
         }
-        if (authRepository.isLoggedIn()) fetchPhotos()
+        if (authUtilsRepository.isLoggedIn()) fetchPhotos()
 
     }
 
@@ -146,7 +146,7 @@ class ItemPhotosViewModel(
             internetState.value = false
             return
         }
-        if (authRepository.isLoggedIn()) fetchNextPhotosPage()
+        if (authUtilsRepository.isLoggedIn()) fetchNextPhotosPage()
     }
 
     private fun fetchNextPhotosPage() {

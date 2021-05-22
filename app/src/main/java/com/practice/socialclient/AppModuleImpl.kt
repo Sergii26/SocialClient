@@ -2,23 +2,25 @@ package com.practice.socialclient
 
 import com.practice.socialclient.model.logger.Log
 import com.practice.socialclient.model.logger.Logger
-import com.practice.socialclient.model.repositories.auth.AuthRepository
-import com.practice.socialclient.model.repositories.auth.facebook.FacebookAuthRepository
-import com.practice.socialclient.model.repositories.auth.twitter.TwitterAuthRepository
-import com.practice.socialclient.model.repositories.network.facebook.FacebookApiClient
-import com.practice.socialclient.model.repositories.network.facebook.client.FacebookLoginManagerImpl
-import com.practice.socialclient.model.repositories.network.facebook.FacebookNetworkClient
-import com.practice.socialclient.model.repositories.network.facebook.client.FacebookLoginManager
-import com.practice.socialclient.model.repositories.network.twitter.TwitterApiClient
-import com.practice.socialclient.model.repositories.network.twitter.TwitterNetworkClient
-import com.practice.socialclient.model.repositories.network.twitter.client.TwitterClient
-import com.practice.socialclient.model.repositories.network.twitter.client.TwitterClientImpl
 import com.practice.socialclient.model.prefs.Prefs
 import com.practice.socialclient.model.prefs.PrefsImpl
-import com.practice.socialclient.model.repositories.network.twitter.client.TwitterConstants
+import com.practice.socialclient.model.repositories.auth.AuthUtilsRepository
+import com.practice.socialclient.model.repositories.auth.facebook.FacebookAuthRepository
+import com.practice.socialclient.model.repositories.auth.facebook.FacebookAuthRepositoryImpl
+import com.practice.socialclient.model.repositories.auth.facebook.FacebookAuthUtilsRepository
+import com.practice.socialclient.model.repositories.auth.twitter.TwitterAuthRepository
+import com.practice.socialclient.model.repositories.auth.twitter.TwitterAuthRepositoryImpl
+import com.practice.socialclient.model.repositories.auth.twitter.TwitterAuthUtilsRepository
+import com.practice.socialclient.model.repositories.auth.twitter.TwitterConstants
 import com.practice.socialclient.model.repositories.friends.FriendsRepository
 import com.practice.socialclient.model.repositories.friends.facebook.FacebookFriendsRepository
 import com.practice.socialclient.model.repositories.friends.twitter.TwitterFriendsRepository
+import com.practice.socialclient.model.repositories.network.facebook.FacebookApiClient
+import com.practice.socialclient.model.repositories.network.facebook.FacebookNetworkClient
+import com.practice.socialclient.model.repositories.network.twitter.TwitterApiClient
+import com.practice.socialclient.model.repositories.network.twitter.TwitterNetworkClient
+import com.practice.socialclient.model.repositories.network.twitter.header_factory.TwitterAuthHeaderFactory
+import com.practice.socialclient.model.repositories.network.twitter.header_factory.TwitterHeaderFactory
 import com.practice.socialclient.model.repositories.news.NewsRepository
 import com.practice.socialclient.model.repositories.news.facebook.FacebookNewsRepository
 import com.practice.socialclient.model.repositories.news.twitter.TwitterNewsRepository
@@ -57,7 +59,7 @@ class AppModuleImpl: AppModule {
             .build()
         val factory = TwitterFactory(conf)
         twitterClient =  factory.instance
-        twitterNetworkClient = TwitterApiClient(TwitterClientImpl(twitterClient))
+        twitterNetworkClient = TwitterApiClient(TwitterAuthHeaderFactory(twitterClient))
     }
 
     @Provides
@@ -79,8 +81,8 @@ class AppModuleImpl: AppModule {
 
     @Provides
     @Singleton
-    override fun provideTwitterClient(): TwitterClient {
-        return TwitterClientImpl(twitterClient)
+    override fun provideTwitterHeaderFactoryt(): TwitterHeaderFactory {
+        return TwitterAuthHeaderFactory(twitterClient)
     }
 
     @Provides
@@ -92,11 +94,6 @@ class AppModuleImpl: AppModule {
     @Provides
     override fun provideUtils(): Utils {
         return AndroidUtils(App.instance)
-    }
-
-    @Provides
-    override fun provideFacebookLoginManager(): FacebookLoginManager {
-        return FacebookLoginManagerImpl(App.appModule!!.provideILog(), App.appModule!!.providePreferences())
     }
 
     @Provides
@@ -148,21 +145,27 @@ class AppModuleImpl: AppModule {
     }
 
     @Provides
-    override fun provideFacebookAuthRepository(): AuthRepository {
-        return FacebookAuthRepository(App.appModule!!.provideILog(),
-            App.appModule!!.provideTwitterClient(), App.appModule!!.providePreferences(),
-            App.appModule!!.provideFacebookLoginManager())
+    override fun provideFacebookAuthUtilsRepository(): AuthUtilsRepository {
+        return FacebookAuthUtilsRepository(App.appModule!!.provideILog(),
+            App.appModule!!.provideTwitterAuthRepository(), App.appModule!!.providePreferences(),
+            App.appModule!!.provideFacebookAuthRepository())
     }
 
     @Provides
-    override fun provideTwitterAuthRepository(): AuthRepository {
-        return TwitterAuthRepository(App.appModule!!.provideILog(),
-            App.appModule!!.provideTwitterClient(), App.appModule!!.providePreferences(),
-            App.appModule!!.provideFacebookLoginManager())
+    override fun provideTwitterAuthUtilsRepository(): AuthUtilsRepository {
+        return TwitterAuthUtilsRepository(App.appModule!!.provideILog(),
+            App.appModule!!.provideTwitterAuthRepository(), App.appModule!!.providePreferences(),
+            App.appModule!!.provideFacebookAuthRepository())
     }
 
 
+    @Provides
+    override fun provideFacebookAuthRepository(): FacebookAuthRepository {
+        return FacebookAuthRepositoryImpl(App.appModule!!.provideILog(), App.appModule!!.providePreferences())
+    }
 
-
-
+    @Provides
+    override fun provideTwitterAuthRepository(): TwitterAuthRepository {
+        return TwitterAuthRepositoryImpl(twitterClient)
+    }
 }

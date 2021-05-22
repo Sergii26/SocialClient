@@ -2,9 +2,9 @@ package com.practice.socialclient.ui.splash
 
 import androidx.lifecycle.*
 import com.practice.socialclient.model.logger.Log
-import com.practice.socialclient.model.repositories.network.twitter.TwitterNetworkClient
-import com.practice.socialclient.model.repositories.network.twitter.client.TwitterClient
 import com.practice.socialclient.model.prefs.Prefs
+import com.practice.socialclient.model.repositories.auth.twitter.TwitterAuthRepository
+import com.practice.socialclient.model.repositories.network.twitter.TwitterNetworkClient
 import com.practice.socialclient.ui.arch.MvvmViewModel
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 class SplashViewModel @Inject constructor(
     private val logger: Log,
-    private val twitterClient: TwitterClient,
+    private val twitterAuthRepo: TwitterAuthRepository,
     private val prefs: Prefs,
     private val twitterNetworkClient: TwitterNetworkClient
 ) : MvvmViewModel(),
@@ -54,7 +54,7 @@ class SplashViewModel @Inject constructor(
 
     private fun setCurrentTwLoginState() {
         if (prefs.getTwitterAuthSecret().isNotEmpty()) {
-            twitterClient.setAccToken(prefs.getTwitterAuthToken(), prefs.getTwitterAuthSecret())
+            twitterAuthRepo.setTwitterAccToken(prefs.getTwitterAuthToken(), prefs.getTwitterAuthSecret())
         }
     }
 

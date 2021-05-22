@@ -5,7 +5,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.practice.socialclient.model.logger.Log
-import com.practice.socialclient.model.repositories.auth.AuthRepository
+import com.practice.socialclient.model.repositories.auth.AuthUtilsRepository
 import com.practice.socialclient.model.dto.FriendInfo
 import com.practice.socialclient.model.dto.FriendsCountInfo
 import com.practice.socialclient.model.dto.UserInfo
@@ -19,7 +19,7 @@ import io.reactivex.schedulers.Schedulers
 
 class ItemFriendsViewModel constructor(
     private val logger: Log,
-    private val authRepository: AuthRepository,
+    private val authUtilsRepository: AuthUtilsRepository,
     private val androidUtils: Utils,
     private val repository: FriendsRepository,
     private val twUserRepository: UserInfoRepository,
@@ -88,7 +88,7 @@ class ItemFriendsViewModel constructor(
     }
 
     override fun logOut() {
-        authRepository.logOut()
+        authUtilsRepository.logOut()
     }
 
     override fun getFriendsListObservable(): MutableLiveData<MutableList<FriendInfo>> {
@@ -143,7 +143,7 @@ class ItemFriendsViewModel constructor(
             return
         }
         internetState.value = true
-        if (authRepository.isLoggedIn()) fetchFriendsCount()
+        if (authUtilsRepository.isLoggedIn()) fetchFriendsCount()
     }
 
     private fun fetchFriendsCount() {
@@ -166,7 +166,7 @@ class ItemFriendsViewModel constructor(
             return
         }
         internetState.value = true
-        if (authRepository.isLoggedIn()) fetchFriends()
+        if (authUtilsRepository.isLoggedIn()) fetchFriends()
     }
 
     private fun fetchFriends() {
@@ -190,7 +190,7 @@ class ItemFriendsViewModel constructor(
             return
         }
         internetState.value = true
-        if(authRepository.isLoggedIn())fetchNextFriendsPage()
+        if(authUtilsRepository.isLoggedIn())fetchNextFriendsPage()
     }
 
     private fun fetchNextFriendsPage() {

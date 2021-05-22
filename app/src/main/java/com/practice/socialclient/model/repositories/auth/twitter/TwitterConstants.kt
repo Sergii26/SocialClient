@@ -1,4 +1,4 @@
-package com.practice.socialclient.model.repositories.network.twitter.client
+package com.practice.socialclient.model.repositories.auth.twitter
 
 object TwitterConstants {
     var CONSUMER_KEY = "RleE7VHrUbNnLi4KfqBz9INWM"
